@@ -1,5 +1,4 @@
 # TODO:
-## Model:
 ### priorità alta:
 - [x] fix confermaRicezione
 - [x] ordinamento delle operazioni in metodi opportuni
