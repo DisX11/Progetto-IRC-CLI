@@ -13,14 +13,6 @@
 - [ ] Controllo Duplicati
 - [ ] ...
 
-## View:
-- [ ] GUI
-- [ ] ...
-
-## Controller:
-- [ ] Controller
-- [ ] ...
-
 ## Altro:
 - [x] Git
 - [x] README e TODO
