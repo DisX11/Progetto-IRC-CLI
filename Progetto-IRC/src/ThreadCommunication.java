@@ -57,22 +57,22 @@ public class ThreadCommunication extends Thread{
                 Pacchetto pacchetto=(Pacchetto) in.readObject();
                 System.out.println("Oggetto ricevuto da "+clientName+": " + pacchetto);
 				switch (pacchetto.getCode()) {
-					case 200:
+					case 200 -> {
 						invia(new Pacchetto("OK",201));
 						pacchetto.setMess(clientName+"!"+pacchetto.getMess());
 						channel.inoltro(pacchetto, this.getId());
-						break;
-					case 201:
+                    }
+					case 201 -> {
 						confermaRicezione=true;
-						break;
-					case 210 | 211:
+					}
+					case 210 | 211 -> {
 						String[] split=pacchetto.getMess().split("!",2);
 						channel.whisper(split[0], new Pacchetto(clientName+"!"+split[1],pacchetto.getCode()));
-						break;
-					case 410:
+                    }
+					case 410 -> {
 						chiudiSocket();
 						closed = true;
-						break;
+                    }
 				}
             }
         } catch (IOException | ClassNotFoundException e) {

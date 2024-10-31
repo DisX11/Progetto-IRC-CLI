@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Scanner;
 
 
 public class Client extends Thread{
@@ -69,28 +68,29 @@ public class Client extends Thread{
             try {
 				entrata = (Pacchetto) in.readObject();
 				switch (entrata.getCode()) {
-					case 200:
+					case 200 -> {
 						System.out.println(entrata);
 						invia(new Pacchetto("messaggio ricevuto",entrata.getCode()+1));
-						break;
-					case 201:
+                    }
+					case 201 -> {
 						System.out.println("risposta server: "+entrata);//debug
-						break;
-					case 210:
+					}
+					case 210 -> {
 						String[] split=entrata.getMess().split("!",2);
 						System.out.println(split[0]+" has whispered to you: "+split[1]);
 						out.writeObject(new Pacchetto(entrata.getMess(),entrata.getCode()+1));
-						break;
-					case 211:
+                    }
+					case 211 -> {
 						System.out.println("Conferma consegna del whisper: "+entrata);
-						break;
-					case 411:
+					}
+					case 411 -> {
 						System.out.println("Termina comunicazione con: "+entrata);
 						chiudiSocket();
 						closed=true;
-						break;
-					default:
-						break;
+                    }
+					default -> {
+						System.out.println("Codice in entrata non valido: "+entrata);
+                    }
 				}
             } catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
