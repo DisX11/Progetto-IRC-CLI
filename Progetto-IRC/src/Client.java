@@ -64,9 +64,9 @@ public class Client extends Thread{
 	public void run() {
 		boolean closed=false;
 		while (!closed) {
-            Pacchetto entrata = new Pacchetto();
             try {
-				entrata = (Pacchetto) in.readObject();
+				Pacchetto entrata = (Pacchetto) in.readObject();
+				if(entrata.getCode()%10==1) confermaRicezione=true; //tutti i messaggi **1 sono conferme di avvenuta ricezione
 				switch (entrata.getCode()) {
 					case 200 -> {
 						System.out.println(entrata);
@@ -78,7 +78,7 @@ public class Client extends Thread{
 					case 210 -> {
 						String[] split=entrata.getMess().split("!",2);
 						System.out.println(split[0]+" has whispered to you: "+split[1]);
-						out.writeObject(new Pacchetto(entrata.getMess(),entrata.getCode()+1));
+						invia(new Pacchetto(entrata.getMess(),entrata.getCode()+1));
                     }
 					case 211 -> {
 						System.out.println("Conferma consegna del whisper: "+entrata);
@@ -98,11 +98,15 @@ public class Client extends Thread{
             }
 		}
 	}
+
+	private void ricevi(){//spostare quì il contenuto di run
+
+	}
 	
 	public void invia(Pacchetto pacchetto) {
 		try {
 			confermaRicezione=pacchetto.getCode()%10==1;
-			//i codici esenti sono le conferme entranti di avvenuta consegna
+			//i codici esenti indicano messaggi che non necessitano di conferma della ricezione
 			do {
 				out.writeObject(pacchetto);
 				System.out.println("invio: " + pacchetto);//debug

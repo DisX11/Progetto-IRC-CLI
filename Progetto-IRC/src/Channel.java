@@ -1,10 +1,4 @@
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
-/*import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;*/
 import java.util.ArrayList;
 
 public class Channel {
@@ -14,7 +8,7 @@ public class Channel {
 
 	public Channel(String nome) {
 		super();
-		this.clientConnectionList = new ArrayList<ThreadCommunication>();
+		this.clientConnectionList = new ArrayList<>();
 		this.nomeChannel = nome;
 	}
 
@@ -26,7 +20,7 @@ public class Channel {
 
 	public void inoltro(Pacchetto pacchetto, long threadMittenteId) {
 		clientConnectionList.forEach((thread) -> {
-			if (thread.getId()!=threadMittenteId) {
+			if (thread.threadId()!=threadMittenteId) {
 				thread.invia(pacchetto);
 			}
 		});

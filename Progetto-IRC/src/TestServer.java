@@ -1,6 +1,6 @@
 public class TestServer {
 	public static void main(String[] args) {		
-		Server server=new Server(4321);
+		Server server=new Server(42069);
 		server.avvia();
 	}
 }

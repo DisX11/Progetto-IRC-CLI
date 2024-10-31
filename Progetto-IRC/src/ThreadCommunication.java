@@ -49,6 +49,9 @@ public class ThreadCommunication extends Thread{
 			chiudiSocket();
 		}
     }
+	private void connetti(){//spostare quì il contenuto di run
+
+	}
 
 	private void ricevi() {
         try {
@@ -56,18 +59,21 @@ public class ThreadCommunication extends Thread{
             while (!closed) {
                 Pacchetto pacchetto=(Pacchetto) in.readObject();
                 System.out.println("Oggetto ricevuto da "+clientName+": " + pacchetto);
+
+				if(pacchetto.getCode()%10==1) confermaRicezione=true; //tutti i messaggi **1 sono conferme di avvenuta ricezione
 				switch (pacchetto.getCode()) {
 					case 200 -> {
 						invia(new Pacchetto("OK",201));
 						pacchetto.setMess(clientName+"!"+pacchetto.getMess());
-						channel.inoltro(pacchetto, this.getId());
+						channel.inoltro(pacchetto, this.threadId());
                     }
 					case 201 -> {
-						confermaRicezione=true;
 					}
-					case 210 | 211 -> {
+					case 210 -> {
 						String[] split=pacchetto.getMess().split("!",2);
 						channel.whisper(split[0], new Pacchetto(clientName+"!"+split[1],pacchetto.getCode()));
+                    }
+					case 211 -> {
                     }
 					case 410 -> {
 						chiudiSocket();
@@ -85,7 +91,7 @@ public class ThreadCommunication extends Thread{
 	public void invia(Pacchetto pacchetto) {
 		try {
 			confermaRicezione=pacchetto.getCode()%10==1;
-			//i codici esenti sono le conferme entranti di avvenuta consegna
+			//i codici esenti indicano messaggi che non necessitano di conferma della ricezione
 			do {
 				out.writeObject(pacchetto);
 				System.out.println(channel.getNomeChannel()+" invia a "+clientName+": "+pacchetto);
