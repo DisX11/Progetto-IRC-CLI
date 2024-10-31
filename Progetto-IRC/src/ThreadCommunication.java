@@ -34,6 +34,12 @@ public class ThreadCommunication extends Thread{
 	
 	@Override
     public void run() {
+
+		connetti();
+
+    }
+
+	private void connetti(){
 		try {
 			Pacchetto pacchetto = (Pacchetto) in.readObject();
 			System.out.println("Pacchetto dal client: " + pacchetto);
@@ -48,9 +54,6 @@ public class ThreadCommunication extends Thread{
 			e.printStackTrace();
 			chiudiSocket();
 		}
-    }
-	private void connetti(){//spostare quì il contenuto di run
-
 	}
 
 	private void ricevi() {

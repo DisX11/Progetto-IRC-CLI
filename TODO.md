@@ -2,7 +2,7 @@
 ## Model:
 ### priorità alta:
 - [x] fix confermaRicezione
-- [ ]  ordinamento delle operazioni in metodi opportuni
+- [x] ordinamento delle operazioni in metodi opportuni
 - [ ] whisper
 - [ ] ...
 ### priorità bassa:

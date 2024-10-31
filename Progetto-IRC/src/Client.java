@@ -62,6 +62,12 @@ public class Client extends Thread{
 
 	@Override
 	public void run() {
+		
+		ricevi();
+
+	}
+
+	private void ricevi(){
 		boolean closed=false;
 		while (!closed) {
             try {
@@ -94,13 +100,9 @@ public class Client extends Thread{
 				}
             } catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
-				break;
+				closed=true;
             }
 		}
-	}
-
-	private void ricevi(){//spostare quì il contenuto di run
-
 	}
 	
 	public void invia(Pacchetto pacchetto) {
