@@ -47,10 +47,10 @@ codice 310:
 
 codice 320:
     (integrato nel codice 100 alla prima connessione)
-    il client richiede la disponibilità del nome utente inserito al canale (controllo disponibilità e integrità (no spazi etc.))
-    se il nome richiesto è accettabile, risponde con lo stesso;
-    altrimenti, risponde con un nome client generato casualmente (l'utente potrà poi richiedere di modificarlo in futuro)
-    in poche parole, la risposta contiene il nome da assegnare al client
+    il client richiede al canale la validità/disponibilità del nome utente inserito
+    se il nome richiesto è accettabile risponde con lo stesso, altrimenti risponde con il vecchio nome
+    (fa eccezione l'inizializzazione, tramite codice 100, dove viene forzatamente generato e assegnato un nome client generato casualmente (l'utente potrà poi richiedere di modificarlo in futuro))
+    in poche parole, la risposta contiene il nome da assegnare/sovrascrivere al client
     [conferma delivery: 321]
 
     integrità nome client inseriti dall'utente:
