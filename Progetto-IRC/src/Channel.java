@@ -35,18 +35,8 @@ public class Channel {
 		});
 	}
 
-	public String nomeClientCheck(ThreadCommunication caller, String requestedName) {
-		if(!isNomeClientOK(caller, requestedName)) {
-			requestedName = generaNomeClient();
-			while (!isNomeClientOK(caller, requestedName)) {
-				requestedName = generaNomeClient();
-			}
-		}
-		return "Client-"+requestedName;
-	}
-
-	private boolean isNomeClientOK(ThreadCommunication caller, String requestedName) {
-		if(requestedName==null || requestedName.isEmpty() || requestedName.matches("[^a-zA-Z0-9_]") || requestedName.startsWith("Client")) {
+	public boolean isNomeClientOK(ThreadCommunication caller, String requestedName) {
+		if(requestedName==null || requestedName.isEmpty() || requestedName.matches("^[^a-zA-Z0-9_]*$") || requestedName.startsWith("Client")) {
 			return false;
 		} else {
 			for (ThreadCommunication thread : clientConnectionList) {
@@ -58,7 +48,7 @@ public class Channel {
 		return true;
 	}
 
-	private String generaNomeClient() {
+	public String generaNomeClient() {
 		//genero una stringa alfanumerica casuale
 		return UUID.randomUUID().toString().replaceAll("_", "").substring(0,5);
 	}

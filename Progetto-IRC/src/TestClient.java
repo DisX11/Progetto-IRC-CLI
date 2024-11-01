@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class TestClient {
 	public static void main(String[] args) {
-		Client client = new Client("localhost", 42069, "-");
+		Client client = new Client("localhost", 42069, "");
 
 		Scanner scanner=new Scanner(System.in);
 		String input;
@@ -14,9 +14,10 @@ public class TestClient {
 				client.invia(new Pacchetto(segments[1]+" "+segments[2],210));
 			} else if(input.equals("/quit")) {
 				client.invia(new Pacchetto("",410));
-			} /*else if(input.equals("/nick")) {
-				client.changeNick(...);
-			}*/ else {
+			} else if(input.startsWith("/nick")) {
+				String[] segments = input.split(" ");
+				client.changeNick(segments[1]);
+			} else {
 				client.invia(new Pacchetto(input,200));
 			}
 		} while (!input.equals("/quit"));

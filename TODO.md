@@ -5,15 +5,15 @@
 - [x] whisper
 - [ ] codice 300
 - [ ] codice 310
-- [ ] codice 320
+- [x] codice 320
 - [x] disponibilità nomeClient alla connessione
-- [ ] /nick
+- [x] /nick
 - [ ] ...
 
 ### priorità bassa:
 - [x] cambio numero porta
 - [ ] sleep 100 -> 10 ms
-- [ ] Nomi client univoci
+- [x] Nomi client univoci
 - [ ] Cambio canale
 - [ ] Canali Multipli
 - [ ] Controllo Duplicati
@@ -54,11 +54,10 @@ codice 320:
     [conferma delivery: 321]
 
     integrità nome client inseriti dall'utente:
-        non è vuoto o nullo
-        no spazi
-        no slashes '\/'
-        non inizia/contiene 'Client-'
+        ammette solo a-z A-Z 0-9
+        non inizia con 'Client'
+        no null o vuoto
 
-/nick (via 320):
+/nick:
     richesta disponibilità nuovo nome utente
     eventuale aggiornamento/applicazione nome (vedi risposta a 320)

@@ -11,6 +11,7 @@ public class Client extends Thread{
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private String nome;
+	private String requestedNome;
 	private boolean confermaRicezione;
 
 	public Client(String ip, int porta, String nome) {
@@ -91,6 +92,10 @@ public class Client extends Thread{
 					case 211 -> {
 						System.out.println("Conferma consegna del whisper: "+entrata);
 					}
+					case 321 -> {
+						nome=entrata.getMess();
+						System.out.println("Risposta dal server sulla richiesta di cambio nickname. Nome attuale: "+nome);
+					}
 					case 411 -> {
 						System.out.println("Termina comunicazione con: "+entrata);
 						chiudiSocket();
@@ -122,7 +127,8 @@ public class Client extends Thread{
     }
 
 	public void changeNick(String newNick) {
-		//invia(new Pacchetto(newNick, 320));
+		requestedNome=newNick;
+		invia(new Pacchetto(nome+" "+newNick, 320));
 	}
 
 	private void chiudiSocket() {

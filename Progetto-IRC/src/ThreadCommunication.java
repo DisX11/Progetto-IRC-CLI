@@ -42,8 +42,8 @@ public class ThreadCommunication extends Thread{
 			Pacchetto pacchetto = (Pacchetto) in.readObject();
 			System.out.println("Pacchetto dal client: " + pacchetto);
 			if(pacchetto.getCode()==100 && pacchetto.getMess()!=null) {
-				clientName=channel.nomeClientCheck(this, pacchetto.getMess());
-				invia(new Pacchetto(clientName,101));//channel risponde con il nome client elaborato: lo stesso richiesto oppure uno nuovo generato
+				clientName=channel.generaNomeClient();
+				invia(new Pacchetto(clientName,101));//channel risponde con il nome client generato
 				ricevi();
 			} else {
 				chiudiSocket();
@@ -77,6 +77,17 @@ public class ThreadCommunication extends Thread{
                     }
 					case 211 -> {
                     }
+					case 320 -> {
+						String[] content=pacchetto.getMess().split(" ", 2);//[0]=currentName [1]=requestedName
+						if(channel.isNomeClientOK(this, content[1])) {
+							System.out.println("Richiesta da "+clientName+" di cambio nickname approvata: {"+clientName+"} diventa {"+content[1]+"}.");
+							clientName=content[1];
+						} else {
+							System.out.println("Richiesta da "+clientName+" di cambio nickname non approvata.");
+							clientName=content[0];
+						}
+						invia(new Pacchetto(clientName,pacchetto.getCode()+1));
+					}
 					case 410 -> {
 						chiudiSocket();
 						closed = true;
