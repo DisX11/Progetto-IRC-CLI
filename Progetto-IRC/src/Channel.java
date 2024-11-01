@@ -46,7 +46,6 @@ public class Channel {
 	}
 
 	private boolean isNomeClientOK(ThreadCommunication caller, String requestedName) {
-		String[] x={""," ","\\","/","Client","-","_","[","]",};
 		if(requestedName==null || requestedName.isEmpty() || requestedName.matches("[^a-zA-Z0-9_]") || requestedName.startsWith("Client")) {
 			return false;
 		} else {
@@ -60,11 +59,7 @@ public class Channel {
 	}
 
 	private String generaNomeClient() {
-		/*genero una stringa alfanumerica casuale
-		byte[] array = new byte[5];
-		new Random().nextBytes(array);
-		String generatedString = new String(array, Charset.forName("UTF-16"));
-		return generatedString;*/
+		//genero una stringa alfanumerica casuale
 		return UUID.randomUUID().toString().replaceAll("_", "").substring(0,5);
 	}
 
