@@ -53,6 +53,7 @@ public class ThreadCommunication extends Thread{
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 			chiudiSocket();
+			
 		}
 	}
 
