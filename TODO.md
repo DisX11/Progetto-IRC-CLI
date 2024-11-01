@@ -8,7 +8,6 @@
 - [ ] codice 320
 - [x] disponibilità nomeClient alla connessione
 - [ ] /nick
-- [ ] convertire controlli in regex (Channel > nomeClientCheck)
 - [ ] ...
 
 ### priorità bassa:
