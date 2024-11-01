@@ -42,8 +42,8 @@ public class ThreadCommunication extends Thread{
 			Pacchetto pacchetto = (Pacchetto) in.readObject();
 			System.out.println("Pacchetto dal client: " + pacchetto);
 			if(pacchetto.getCode()==100 && pacchetto.getMess()!=null) {
-				clientName=pacchetto.getMess();
-				invia(new Pacchetto("Connessione stabilita.",101));
+				clientName=channel.nomeClientCheck(this, pacchetto.getMess());
+				invia(new Pacchetto(clientName,101));//channel risponde con il nome client elaborato: lo stesso richiesto oppure uno nuovo generato
 				ricevi();
 			} else {
 				chiudiSocket();
@@ -51,7 +51,6 @@ public class ThreadCommunication extends Thread{
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 			chiudiSocket();
-			
 		}
 	}
 

@@ -47,6 +47,8 @@ public class Client extends Thread{
 				System.out.println("Il server non ha approvato la connessione");
 				chiudiSocket();
 			} else {
+				nome=risposta.getMess();
+				System.out.println("nome ricevuto: "+nome);
 				this.start();
 			}
 		} catch (IOException e) {
