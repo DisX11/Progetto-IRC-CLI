@@ -46,7 +46,8 @@ public class Channel {
 	}
 
 	private boolean isNomeClientOK(ThreadCommunication caller, String requestedName) {
-		if(requestedName==null || requestedName.contains(" ") || requestedName.contains("\\") || requestedName.contains("/") || requestedName.contains("Client-")) { //convertire controlli in regex
+		String[] x={""," ","\\","/","Client","-","_","[","]",};
+		if(requestedName==null || requestedName.isEmpty() || requestedName.matches("[^a-zA-Z0-9_]") || requestedName.startsWith("Client")) {
 			return false;
 		} else {
 			for (ThreadCommunication thread : clientConnectionList) {

@@ -121,6 +121,10 @@ public class Client extends Thread{
         }
     }
 
+	public void changeNick(String newNick) {
+		//invia(new Pacchetto(newNick, 320));
+	}
+
 	private void chiudiSocket() {
 		try {
 			client.close();
