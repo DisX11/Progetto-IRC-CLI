@@ -11,7 +11,7 @@ public class TestClient2 {
 			input = scanner.nextLine();
 			if(input.startsWith("/whisper")) {
 				String[] segments = input.split(" ");
-				client.invia(new Pacchetto(segments[1]+"!"+segments[2],200));
+				client.invia(new Pacchetto(segments[1]+" "+segments[2],210));
 			} else if(input.equals("/quit")) {
 				client.invia(new Pacchetto("",410));
 			} else {

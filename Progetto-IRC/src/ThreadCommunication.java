@@ -34,9 +34,7 @@ public class ThreadCommunication extends Thread{
 	
 	@Override
     public void run() {
-
 		connetti();
-
     }
 
 	private void connetti(){
@@ -68,14 +66,15 @@ public class ThreadCommunication extends Thread{
 				switch (pacchetto.getCode()) {
 					case 200 -> {
 						invia(new Pacchetto("OK",201));
-						pacchetto.setMess(clientName+"!"+pacchetto.getMess());
+						pacchetto.setMess(clientName+" "+pacchetto.getMess());
 						channel.inoltro(pacchetto, this.threadId());
                     }
 					case 201 -> {
 					}
 					case 210 -> {
-						String[] split=pacchetto.getMess().split("!",2);
-						channel.whisper(split[0], new Pacchetto(clientName+"!"+split[1],pacchetto.getCode()));
+						invia(new Pacchetto("whisper OK",pacchetto.getCode()+1));//conferma al client la ricezione del whisper
+						String[] split=pacchetto.getMess().split(" ",2);
+						channel.whisper(split[0], new Pacchetto(clientName+" "+split[1],pacchetto.getCode()));//invio del whisper al destinatario
                     }
 					case 211 -> {
                     }

@@ -62,9 +62,7 @@ public class Client extends Thread{
 
 	@Override
 	public void run() {
-		
 		ricevi();
-
 	}
 
 	private void ricevi(){
@@ -75,16 +73,18 @@ public class Client extends Thread{
 				if(entrata.getCode()%10==1) confermaRicezione=true; //tutti i messaggi **1 sono conferme di avvenuta ricezione
 				switch (entrata.getCode()) {
 					case 200 -> {
-						System.out.println(entrata);
+						String[] messaggio=entrata.getMess().split(" ", 2);
+						entrata.setMess(messaggio[1]);
+						System.out.println(messaggio[0]+": "+entrata);
 						invia(new Pacchetto("messaggio ricevuto",entrata.getCode()+1));
                     }
 					case 201 -> {
 						System.out.println("risposta server: "+entrata);//debug
 					}
 					case 210 -> {
-						String[] split=entrata.getMess().split("!",2);
+						String[] split=entrata.getMess().split(" ",2);
 						System.out.println(split[0]+" has whispered to you: "+split[1]);
-						invia(new Pacchetto(entrata.getMess(),entrata.getCode()+1));
+						invia(new Pacchetto("whisper ricevuto",entrata.getCode()+1));
                     }
 					case 211 -> {
 						System.out.println("Conferma consegna del whisper: "+entrata);

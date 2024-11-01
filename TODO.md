@@ -2,7 +2,7 @@
 ### priorità alta:
 - [x] fix confermaRicezione
 - [x] ordinamento delle operazioni in metodi opportuni
-- [ ] whisper
+- [x] whisper
 - [ ] ...
 ### priorità bassa:
 - [x] cambio numero porta
