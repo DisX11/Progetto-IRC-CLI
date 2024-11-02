@@ -1,27 +1,31 @@
 # TODO:
 ### priorità alta:
+- [ ] codice 300
+- [ ] codice 312 ???
+- [ ] codice 315
 - [x] fix confermaRicezione
 - [x] ordinamento delle operazioni in metodi opportuni
 - [x] whisper
-- [ ] codice 300
-- [ ] codice 310
+- [x] codice 310
 - [x] codice 320
 - [x] disponibilità nomeClient alla connessione
 - [x] /nick
+- [x] whisper: nome inserito errato/non valido
 - [ ] ...
 
 ### priorità bassa:
-- [x] cambio numero porta
-- [ ] sleep 100 -> 10 ms
-- [x] Nomi client univoci
-- [ ] Cambio canale
+- [ ] consegna lettura messaggi/whisper
 - [ ] Canali Multipli
+- [ ] Cambio canale
 - [ ] Controllo Duplicati
 - [ ] Replica protocollo reale
 - [ ] studio protocollo reale (x idee implementazioni)
 - [ ] documentazione completa codice
 - [ ] documentazione completa protocollo
 - [ ] unit testing
+- [x] cambio numero porta
+- [x] sleep 100 -> 10 ms
+- [x] Nomi client univoci
 - [ ] ...
 
 ## Altro:
@@ -42,10 +46,22 @@ codice 300:
     [conferma delivery: 301]
 
 codice 310:
-    retrieve numero participanti al canale
+    /info partList
+    retrieve lista participanti al canale
     [conferma delivery: 311]
 
+codice 312 (altre info channel) ???
+    ...
+    [conferma delivery 313]
+
+codice 315
+    /info all
+    retrieve tutte le informazioni utili dal canale (unione dell'output di tutti gli altri /info)
+    da fare alla fine per essere sicuri di includere tutti gli /info precedentemente implementati
+    [conferma delivery 316]
+
 codice 320:
+    /nick
     (integrato nel codice 100 alla prima connessione)
     il client richiede al canale la validità/disponibilità del nome utente inserito
     se il nome richiesto è accettabile risponde con lo stesso, altrimenti risponde con il vecchio nome
@@ -57,7 +73,3 @@ codice 320:
         ammette solo a-z A-Z 0-9
         non inizia con 'Client'
         no null o vuoto
-
-/nick:
-    richesta disponibilità nuovo nome utente
-    eventuale aggiornamento/applicazione nome (vedi risposta a 320)

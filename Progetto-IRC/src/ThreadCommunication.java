@@ -68,15 +68,15 @@ public class ThreadCommunication extends Thread{
 						pacchetto.setMess(clientName+" "+pacchetto.getMess());
 						channel.inoltro(pacchetto, this.threadId());
                     }
-					case 201 -> {
-					}
 					case 210 -> {
-						invia(new Pacchetto("whisper OK",pacchetto.getCode()+1));//conferma al client la ricezione del whisper
+						//la conferma o meno dell'invio del pacchetto al ricevente viene gestita da channel.whisper()
 						String[] split=pacchetto.getMess().split(" ",2);
-						channel.whisper(split[0], new Pacchetto(clientName+" "+split[1],pacchetto.getCode()));//invio del whisper al destinatario
+						channel.whisper(this, split[0], new Pacchetto(clientName+" "+split[1],pacchetto.getCode()));//invio del whisper al destinatario
                     }
-					case 211 -> {
-                    }
+					case 310 -> {
+						System.out.println(clientName+" has requested the participant list of "+channel.getNomeChannel()+".");
+						invia(new Pacchetto(channel.getPartString(),pacchetto.getCode()+1));
+					}
 					case 320 -> {
 						String[] content=pacchetto.getMess().split(" ", 2);//[0]=currentName [1]=requestedName
 						if(channel.isNomeClientOK(this, content[1])) {
@@ -108,7 +108,7 @@ public class ThreadCommunication extends Thread{
 			do {
 				out.writeObject(pacchetto);
 				System.out.println(channel.getNomeChannel()+" invia a "+clientName+": "+pacchetto);
-				Thread.sleep(100);
+				Thread.sleep(10);
 			}while(!confermaRicezione);
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();

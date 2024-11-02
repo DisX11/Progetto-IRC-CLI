@@ -3,7 +3,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-
 public class Client extends Thread{
 	private Socket client;
 	private String ip;
@@ -92,6 +91,9 @@ public class Client extends Thread{
 					case 211 -> {
 						System.out.println("Conferma consegna del whisper: "+entrata);
 					}
+					case 311 -> {
+						System.err.println("Participants list received:\n"+entrata.getMess().replace(" ", "\n"));
+					}
 					case 321 -> {
 						nome=entrata.getMess();
 						System.out.println("Risposta dal server sulla richiesta di cambio nickname. Nome attuale: "+nome);
@@ -119,7 +121,7 @@ public class Client extends Thread{
 			do {
 				out.writeObject(pacchetto);
 				System.out.println("invio: " + pacchetto);//debug
-				Thread.sleep(100);
+				Thread.sleep(10);
 			} while (!confermaRicezione);
 		} catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -129,6 +131,18 @@ public class Client extends Thread{
 	public void changeNick(String newNick) {
 		requestedNome=newNick;
 		invia(new Pacchetto(nome+" "+newNick, 320));
+	}
+
+	public void retrieveInfo(String type) {
+		if(type==null) return;
+		switch (type) {
+			case "partList" -> {
+				invia(new Pacchetto("",310));
+                }
+			default -> {
+				System.err.println("Wrong syntax for the command.");
+			}
+		}
 	}
 
 	private void chiudiSocket() {

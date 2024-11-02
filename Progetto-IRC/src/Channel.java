@@ -27,12 +27,25 @@ public class Channel {
 		});
 	}
 
-	public void whisper(String clientReceiver, Pacchetto pacchetto){
-		clientConnectionList.forEach((thread) -> {
-			if (thread.getClientName().equals(clientReceiver)) {
-				thread.invia(pacchetto);
+	private boolean isInChannel(String clientNameToCheck) {
+		for (ThreadCommunication thread : clientConnectionList) {
+			if(thread.getClientName().equals(clientNameToCheck)) {
+				return true;
 			}
-		});
+		}
+		return false;
+	}
+
+	public void whisper(ThreadCommunication sender, String clientReceiver, Pacchetto pacchetto){
+		if(isInChannel(clientReceiver)) {
+			clientConnectionList.forEach((thread2) -> {
+				if (thread2.getClientName().equals(clientReceiver)) {
+					thread2.invia(pacchetto);
+				}
+			});
+		} else {
+			sender.invia(new Pacchetto("Nome client destinatario errato oppure non presente nel canale.", pacchetto.getCode()+1));
+		}
 	}
 
 	public boolean isNomeClientOK(ThreadCommunication caller, String requestedName) {
@@ -51,6 +64,14 @@ public class Channel {
 	public String generaNomeClient() {
 		//genero una stringa alfanumerica casuale
 		return UUID.randomUUID().toString().replaceAll("_", "").substring(0,5);
+	}
+
+	public String getPartString() {
+		String s="";
+		for (ThreadCommunication thread : clientConnectionList) {
+			s+=thread.getClientName()+" ";
+		}
+		return s;
 	}
 
 	public void chiudiSocket(ThreadCommunication threadToClose) {
