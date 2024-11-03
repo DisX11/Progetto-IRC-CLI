@@ -37,7 +37,7 @@ public class Channel {
 	}
 
 	public void whisper(ThreadCommunication sender, String clientReceiver, Pacchetto pacchetto){
-		if(isInChannel(clientReceiver)) {
+		if(isInChannel(clientReceiver) && sender.getClientName()!=clientReceiver) {
 			clientConnectionList.forEach((thread2) -> {
 				if (thread2.getClientName().equals(clientReceiver)) {
 					thread2.invia(pacchetto);
