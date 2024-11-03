@@ -1,7 +1,5 @@
 # TODO:
 ### priorità alta:
-- [ ] codice 312 ???
-- [ ] codice 315
 - [x] fix confermaRicezione
 - [x] ordinamento delle operazioni in metodi opportuni
 - [x] whisper
@@ -14,10 +12,9 @@
 - [ ] ...
 
 ### priorità bassa:
-- [ ] consegna lettura messaggi/whisper
+- [ ] Controllo Duplicati
 - [ ] Canali Multipli
 - [ ] Cambio canale
-- [ ] Controllo Duplicati
 - [ ] Replica protocollo reale
 - [ ] studio protocollo reale (x idee implementazioni)
 - [ ] documentazione completa codice
@@ -46,19 +43,12 @@ codice 300:
     [conferma delivery: 301]
 
 codice 310:
-    /info partList
-    retrieve lista participanti al canale
+    /info [partList, all, ...]
+    partList: retrieve lista participanti al canale
+    all: tutte le info del canale
     [conferma delivery: 311]
 
-codice 312 (altre info channel) ???
-    ...
-    [conferma delivery 313]
 
-codice 315
-    /info all
-    retrieve tutte le informazioni utili dal canale (unione dell'output di tutti gli altri /info)
-    da fare alla fine per essere sicuri di includere tutti gli /info precedentemente implementati
-    [conferma delivery 316]
 
 codice 320:
     /nick
