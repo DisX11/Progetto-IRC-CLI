@@ -63,7 +63,7 @@ public class Channel {
 
 	public String generaNomeClient() {
 		//genero una stringa alfanumerica casuale
-		return UUID.randomUUID().toString().replaceAll("_", "").substring(0,5);
+		return "Client-"+UUID.randomUUID().toString().replaceAll("_", "").substring(0,5);
 	}
 
 	public String getPartString() {

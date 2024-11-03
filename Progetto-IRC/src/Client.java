@@ -91,6 +91,10 @@ public class Client extends Thread{
 					case 211 -> {
 						System.out.println("Conferma consegna del whisper: "+entrata);
 					}
+					case 300 -> {
+						System.out.println(entrata.getMess());
+						invia(new Pacchetto("",entrata.getCode()+1));
+					}
 					case 311 -> {
 						System.err.println("Participants list received:\n"+entrata.getMess().replace(" ", "\n"));
 					}

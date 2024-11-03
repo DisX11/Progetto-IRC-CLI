@@ -44,6 +44,12 @@ public class ThreadCommunication extends Thread{
 			if(pacchetto.getCode()==100 && pacchetto.getMess()!=null) {
 				clientName=channel.generaNomeClient();
 				invia(new Pacchetto(clientName,101));//channel risponde con il nome client generato
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				channel.inoltro(new Pacchetto(clientName+" has joined the channel.",300), this.threadId());//segnala agli altri client connessi la sua unione al canale
 				ricevi();
 			} else {
 				chiudiSocket();
@@ -73,6 +79,9 @@ public class ThreadCommunication extends Thread{
 						String[] split=pacchetto.getMess().split(" ",2);
 						channel.whisper(this, split[0], new Pacchetto(clientName+" "+split[1],pacchetto.getCode()));//invio del whisper al destinatario
                     }
+					case 301 -> {
+						System.out.println("Join alert received by "+clientName);
+					}
 					case 310 -> {
 						System.out.println(clientName+" has requested the participant list of "+channel.getNomeChannel()+".");
 						invia(new Pacchetto(channel.getPartString(),pacchetto.getCode()+1));
