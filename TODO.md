@@ -1,6 +1,5 @@
 # TODO:
 ### priorità alta:
-- [ ] codice 300
 - [ ] codice 312 ???
 - [ ] codice 315
 - [x] fix confermaRicezione
@@ -11,6 +10,7 @@
 - [x] disponibilità nomeClient alla connessione
 - [x] /nick
 - [x] whisper: nome inserito errato/non valido
+- [x] codice 300
 - [ ] ...
 
 ### priorità bassa:
@@ -42,7 +42,7 @@ cambio numero porta:
     la porta 4321 non è nel range di porte libere [49152 - 65535] quindi va cambiata in un'altra es. 42069
 
 codice 300:
-    alert avviso entrata/uscita di client nei canali
+    alert avviso entrata di client nei canali
     [conferma delivery: 301]
 
 codice 310:
