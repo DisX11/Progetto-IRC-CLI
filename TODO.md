@@ -1,5 +1,6 @@
 # TODO:
 ### priorità alta:
+- [ ] codice errore server->client (ex. 50)
 - [x] fix confermaRicezione
 - [x] ordinamento delle operazioni in metodi opportuni
 - [x] whisper
