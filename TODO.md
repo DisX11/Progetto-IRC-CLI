@@ -13,6 +13,7 @@
 - [ ] ...
 
 ### priorità bassa:
+- [ ] [text](https://github.com/inspircd/inspircd/releases/tag/v4.4.0)
 - [ ] Controllo Duplicati
 - [ ] Canali Multipli
 - [ ] Cambio canale

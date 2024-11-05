@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class TestClient {
 	public static void main(String[] args) {
-		Client client = new Client("10.202.28.19", 42069, "");
+		Client client = new Client("localhost", 42069, "");
 
 		Scanner scanner=new Scanner(System.in);
 		String input;
