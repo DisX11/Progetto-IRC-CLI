@@ -1,6 +1,7 @@
 # TODO:
 ### priorità alta:
 - [ ] codice errore server->client (ex. 50)
+- [ ] controllare messaggio errore x non possibilità cambio nick
 - [x] fix confermaRicezione
 - [x] ordinamento delle operazioni in metodi opportuni
 - [x] whisper
