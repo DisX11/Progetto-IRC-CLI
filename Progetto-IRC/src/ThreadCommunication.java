@@ -75,6 +75,7 @@ public class ThreadCommunication extends Thread{
 						channel.inoltro(pacchetto, this.threadId());
                     }
 					case 210 -> {
+						invia(new Pacchetto("",211));
 						//la conferma o meno dell'invio del pacchetto al ricevente viene gestita da channel.whisper()
 						String[] split=pacchetto.getMess().split(" ",2);
 						channel.whisper(this, split[0], new Pacchetto(clientName+" "+split[1],pacchetto.getCode()));//invio del whisper al destinatario
