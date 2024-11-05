@@ -118,7 +118,7 @@ public class ThreadCommunication extends Thread{
 			do {
 				out.writeObject(pacchetto);
 				System.out.println(channel.getNomeChannel()+" invia a "+clientName+": "+pacchetto);
-				Thread.sleep(40);
+				Thread.sleep(100);
 			}while(!confermaRicezione);
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
