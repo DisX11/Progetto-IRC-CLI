@@ -26,7 +26,7 @@ public class Server{
 				System.out.println("Client connesso e aggiunto");
                 
                 try {
-					Thread.sleep(100);
+					Thread.sleep(200);
 
 				} catch (InterruptedException e) {
 					e.printStackTrace();

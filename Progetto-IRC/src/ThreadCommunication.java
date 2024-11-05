@@ -45,7 +45,7 @@ public class ThreadCommunication extends Thread{
 				clientName=channel.generaNomeClient();
 				invia(new Pacchetto(clientName,101));//channel risponde con il nome client generato
 				try {
-					Thread.sleep(10);
+					Thread.sleep(200);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -118,7 +118,7 @@ public class ThreadCommunication extends Thread{
 			do {
 				out.writeObject(pacchetto);
 				System.out.println(channel.getNomeChannel()+" invia a "+clientName+": "+pacchetto);
-				Thread.sleep(100);
+				Thread.sleep(200);
 			}while(!confermaRicezione);
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();

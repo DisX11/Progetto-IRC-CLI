@@ -125,7 +125,7 @@ public class Client extends Thread{
 			do {
 				out.writeObject(pacchetto);
 				System.out.println("invio: " + pacchetto);//debug
-				Thread.sleep(100);
+				Thread.sleep(200);
 			} while (!confermaRicezione);
 		} catch (IOException | InterruptedException e) {
             e.printStackTrace();
