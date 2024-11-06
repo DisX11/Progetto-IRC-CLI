@@ -2,10 +2,10 @@
 ### priorità alta:
 - [ ] codice errore server->client (ex. 50)
 - [ ] controllare messaggio errore x non possibilità cambio nick
-- [ ] /mute (con Thread.sleep(timeSpan))
+- [ ] /mute (con Thread.sleep(timeSpan)) (530)
 - [ ] threadCommunication si salva se il proprio client ha o men o i privilegi da admin. (così più client possono essere admin)
-- [ ] 500s serie di comandi admin
-- [ ] /assign user role rinuncia(bool) (pacchetto unico per aggiunta/cambio admin)
+- [ ] /assign user role rinuncia(bool) (pacchetto unico per aggiunta/cambio admin) (510)
+- [ ] /kick (520)
 - [x] fix confermaRicezione
 - [x] ordinamento delle operazioni in metodi opportuni
 - [x] whisper
