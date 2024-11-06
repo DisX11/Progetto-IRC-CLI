@@ -107,6 +107,9 @@ public class Client extends Thread{
 						chiudiSocket();
 						closed=true;
                     }
+					case 531 -> {
+						System.out.println(entrata.getMess());
+					}
 					default -> {
 						System.out.println("Codice in entrata non valido: "+entrata);
                     }
@@ -147,6 +150,10 @@ public class Client extends Thread{
 				System.err.println("Wrong syntax for the command.");
 			}
 		}
+	}
+
+	public void mute(String targetName, int timeSpan) {
+		invia(new Pacchetto(targetName+" "+timeSpan, 530));
 	}
 
 	private void chiudiSocket() {

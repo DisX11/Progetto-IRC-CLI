@@ -70,7 +70,8 @@ public class ThreadCommunication extends Thread{
 				if(pacchetto.getCode()%10==1) confermaRicezione=true; //tutti i messaggi **1 sono conferme di avvenuta ricezione
 				switch (pacchetto.getCode()) {
 					case 200 -> {
-						invia(new Pacchetto("OK",201));
+						//check if muted 
+						invia(new Pacchetto("",201));
 						pacchetto.setMess(clientName+" "+pacchetto.getMess());
 						channel.inoltro(pacchetto, this.threadId());
                     }
@@ -102,6 +103,12 @@ public class ThreadCommunication extends Thread{
 						chiudiSocket();
 						closed = true;
                     }
+					case 530 -> {
+						String targetName=pacchetto.getMess().split(" ",2)[0];
+						int timeSpan=Integer.parseInt(pacchetto.getMess().split(" ",2)[1]);
+						System.out.println(clientName+" has requested to mute "+targetName+" for "+timeSpan+" seconds.");
+						channel.mute(targetName,timeSpan);
+					}
 				}
             }
         } catch (IOException | ClassNotFoundException e) {

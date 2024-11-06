@@ -74,6 +74,10 @@ public class Channel {
 		return s;
 	}
 
+	public void mute(String targetName, int timeSpan) {
+		
+	}
+
 	public void chiudiSocket(ThreadCommunication threadToClose) {
 		clientConnectionList.remove(threadToClose);
 		System.out.println("Rimuovo un client dal channel.");
