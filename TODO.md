@@ -70,3 +70,12 @@ codice 320:
         ammette solo a-z A-Z 0-9
         non inizia con 'Client'
         no null o vuoto
+
+---
+CLASSI DI CODICI
+
+100: connessione
+200: messaggistica (client source)
+300: retrieve info (server source)
+400: disconnessione/errori vari
+500: admin
