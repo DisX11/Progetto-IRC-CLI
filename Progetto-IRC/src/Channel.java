@@ -69,13 +69,17 @@ public class Channel {
 	public String getPartString() {
 		String s="";
 		for (ThreadCommunication thread : clientConnectionList) {
-			s+=thread.getClientName()+" ";
+			s+=thread.toString()+" ";
 		}
 		return s;
 	}
 
 	public void mute(String targetName, int timeSpan) {
-		
+		clientConnectionList.forEach((thread) -> {
+			if (thread.getClientName().equals(targetName)) {
+				thread.mute(true, timeSpan);
+			}
+		});
 	}
 
 	public void chiudiSocket(ThreadCommunication threadToClose) {

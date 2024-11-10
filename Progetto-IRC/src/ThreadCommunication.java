@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ThreadCommunication extends Thread{
 	private final Socket clientSocket;
@@ -10,11 +12,13 @@ public class ThreadCommunication extends Thread{
 	private ObjectOutputStream out;
 	private String clientName;
 	private boolean confermaRicezione;
+	private boolean currentlyMuted;
 
 	public ThreadCommunication(Channel channel, Socket clientSocket) {
 		super();
 		this.channel=channel;
 		this.clientSocket=clientSocket;
+		this.currentlyMuted=false;
 
 		try {
 			out=new ObjectOutputStream(clientSocket.getOutputStream());
@@ -65,21 +69,17 @@ public class ThreadCommunication extends Thread{
             boolean closed=false;
             while (!closed) {
                 Pacchetto pacchetto=(Pacchetto) in.readObject();
-                System.out.println("Oggetto ricevuto da "+clientName+": " + pacchetto);
-
+				System.out.println("Oggetto ricevuto da "+clientName+": " + pacchetto);
 				if(pacchetto.getCode()%10==1) confermaRicezione=true; //tutti i messaggi **1 sono conferme di avvenuta ricezione
 				switch (pacchetto.getCode()) {
 					case 200 -> {
-						//check if muted 
-						invia(new Pacchetto("",201));
+						invia(new Pacchetto("",pacchetto.getCode()+1));
 						pacchetto.setMess(clientName+" "+pacchetto.getMess());
-						channel.inoltro(pacchetto, this.threadId());
+						messInUscita(pacchetto);
                     }
 					case 210 -> {
-						invia(new Pacchetto("",211));
-						//la conferma o meno dell'invio del pacchetto al ricevente viene gestita da channel.whisper()
-						String[] split=pacchetto.getMess().split(" ",2);
-						channel.whisper(this, split[0], new Pacchetto(clientName+" "+split[1],pacchetto.getCode()));//invio del whisper al destinatario
+						invia(new Pacchetto("",pacchetto.getCode()+1));
+						messInUscita(pacchetto);
                     }
 					case 301 -> {
 						System.out.println("Join alert received by "+clientName);
@@ -99,14 +99,22 @@ public class ThreadCommunication extends Thread{
 						}
 						invia(new Pacchetto(clientName,pacchetto.getCode()+1));
 					}
+					case 331 -> {
+						System.out.println(clientName+": "+pacchetto.getMess());
+					}
+					case 341 -> {
+						System.out.println(clientName+": "+pacchetto.getMess());
+					}
 					case 410 -> {
 						chiudiSocket();
 						closed = true;
                     }
 					case 530 -> {
+						invia(new Pacchetto("",531));
 						String targetName=pacchetto.getMess().split(" ",2)[0];
 						int timeSpan=Integer.parseInt(pacchetto.getMess().split(" ",2)[1]);
 						System.out.println(clientName+" has requested to mute "+targetName+" for "+timeSpan+" seconds.");
+						//check if admin, then below (TODO)
 						channel.mute(targetName,timeSpan);
 					}
 				}
@@ -132,6 +140,38 @@ public class ThreadCommunication extends Thread{
 		}
 	}
 
+	private void messInUscita(Pacchetto pacchetto) {
+		if (!currentlyMuted) {
+			switch (pacchetto.getCode()) {
+				case 200 -> {
+					channel.inoltro(pacchetto, this.threadId());
+				}
+				case 210 -> {
+					String[] split=pacchetto.getMess().split(" ",2);
+					channel.whisper(this, split[0], new Pacchetto(clientName+" "+split[1],pacchetto.getCode()));//invio del whisper al destinatario
+				}
+			}
+		} else {
+			invia(new Pacchetto("Azione temporaneamente non consentita, sei stato mutato.",330));
+		}
+	}
+
+	public void mute(boolean bool, int timeSpan) {
+		if(!currentlyMuted) {
+			invia(new Pacchetto("Sei stato mutato per "+timeSpan+" secondi.",340));
+			currentlyMuted=bool;
+			Timer timer=new Timer();
+			TimerTask task = new TimerTask() {
+				@Override
+				public void run() {
+					currentlyMuted=false;
+					invia(new Pacchetto("Sei stato riattivato.",340));
+				}
+			};
+			timer.schedule(task, timeSpan*1000);
+		}
+	}
+
 	private void chiudiSocket() {
 		channel.chiudiSocket(this);
 		if(clientSocket.isClosed())return;
@@ -143,5 +183,9 @@ public class ThreadCommunication extends Thread{
 			System.out.println("Problemi nella chiusura del socket");
 		}
 		System.out.println("Chiudo il socket.");
+	}
+
+	public String toString() {
+		return clientName+" [muted: "+currentlyMuted+"]";
 	}
 }

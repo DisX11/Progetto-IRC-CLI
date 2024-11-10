@@ -102,6 +102,14 @@ public class Client extends Thread{
 						nome=entrata.getMess();
 						System.out.println("Risposta dal server sulla richiesta di cambio nickname. Nome attuale: "+nome);
 					}
+					case 330 -> {
+						System.out.println(entrata.getMess());
+						invia(new Pacchetto("errore 'muted' ricevuto",entrata.getCode()+1));
+					}
+					case 340 -> {
+						System.out.println(entrata.getMess());
+						invia(new Pacchetto("alert 'muted' ricevuto",entrata.getCode()+1));
+					}
 					case 411 -> {
 						System.out.println("Termina comunicazione con: "+entrata);
 						chiudiSocket();

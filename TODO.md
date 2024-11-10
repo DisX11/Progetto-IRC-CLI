@@ -1,11 +1,11 @@
 # TODO:
 ### priorità alta:
-- [ ] codice errore server->client (ex. 50)
 - [ ] controllare messaggio errore x non possibilità cambio nick
-- [ ] /mute (con Thread.sleep(timeSpan)) (530)
+- [?] /mute (530)
 - [ ] threadCommunication si salva se il proprio client ha o men o i privilegi da admin. (così più client possono essere admin)
-- [ ] /assign user role rinuncia(bool) (pacchetto unico per aggiunta/cambio admin) (510)
+- [ ] /assign user role mantenere(bool) (pacchetto unico per aggiunta/cambio admin) (510)
 - [ ] /kick (520)
+- [ ] invertire 330 con 340 (lo sa matei)
 - [x] fix confermaRicezione
 - [x] ordinamento delle operazioni in metodi opportuni
 - [x] whisper
@@ -55,8 +55,6 @@ codice 310:
     all: tutte le info del canale
     [conferma delivery: 311]
 
-
-
 codice 320:
     /nick
     (integrato nel codice 100 alla prima connessione)
@@ -70,6 +68,18 @@ codice 320:
         ammette solo a-z A-Z 0-9
         non inizia con 'Client'
         no null o vuoto
+
+codice 330:
+    errore x mute
+    [conferma delivery: 331]
+
+codice 340:
+    alert mute on/off
+    [conferma delivery: 341]
+
+codice 350: (DA FARE)
+    alert uscita canale
+    [conferma delivery: 341]
 
 ---
 CLASSI DI CODICI
