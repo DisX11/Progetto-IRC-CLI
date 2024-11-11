@@ -1,10 +1,11 @@
 # TODO:
 ### priorità alta:
 - [ ] controllare messaggio errore x non possibilità cambio nick
-- [?] /mute (530)
 - [ ] threadCommunication si salva se il proprio client ha o men o i privilegi da admin. (così più client possono essere admin)
 - [ ] /assign user role mantenere(bool) (pacchetto unico per aggiunta/cambio admin) (510)
 - [ ] /kick (520)
+- [ ] admin può cambiare nome al channel
+- [ ] /mute (530)
 - [ ] invertire 330 con 340 (lo sa matei)
 - [x] fix confermaRicezione
 - [x] ordinamento delle operazioni in metodi opportuni
@@ -20,8 +21,6 @@
 ### priorità bassa:
 - [ ] [text](https://github.com/inspircd/inspircd/releases/tag/v4.4.0)
 - [ ] Controllo Duplicati
-- [ ] Canali Multipli
-- [ ] Cambio canale
 - [ ] Replica protocollo reale
 - [ ] studio protocollo reale (x idee implementazioni)
 - [ ] documentazione completa codice
@@ -30,6 +29,8 @@
 - [x] cambio numero porta
 - [x] sleep 100 -> 10 ms
 - [x] Nomi client univoci
+- [x] Canali Multipli
+- [x] Cambio canale
 - [ ] ...
 
 ## Altro:

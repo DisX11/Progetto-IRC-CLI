@@ -10,7 +10,6 @@ public class Client extends Thread{
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private String nome;
-	private String requestedNome;
 	private boolean confermaRicezione;
 
 	public Client(String ip, int porta, String nome) {
@@ -74,6 +73,9 @@ public class Client extends Thread{
 				Pacchetto entrata = (Pacchetto) in.readObject();
 				if(entrata.getCode()%10==1) confermaRicezione=true; //tutti i messaggi **1 sono conferme di avvenuta ricezione
 				switch (entrata.getCode()) {
+					case 111 -> {
+						System.out.println(entrata.getMess());
+					}
 					case 200 -> {
 						String[] messaggio=entrata.getMess().split(" ", 2);
 						entrata.setMess(messaggio[1]);
@@ -102,14 +104,14 @@ public class Client extends Thread{
 						nome=entrata.getMess();
 						System.out.println("Risposta dal server sulla richiesta di cambio nickname. Nome attuale: "+nome);
 					}
-					case 330 -> {
+					/*case 330 -> {
 						System.out.println(entrata.getMess());
 						invia(new Pacchetto("errore 'muted' ricevuto",entrata.getCode()+1));
 					}
 					case 340 -> {
 						System.out.println(entrata.getMess());
 						invia(new Pacchetto("alert 'muted' ricevuto",entrata.getCode()+1));
-					}
+					}*/
 					case 411 -> {
 						System.out.println("Termina comunicazione con: "+entrata);
 						chiudiSocket();
@@ -144,7 +146,6 @@ public class Client extends Thread{
     }
 
 	public void changeNick(String newNick) {
-		requestedNome=newNick;
 		invia(new Pacchetto(nome+" "+newNick, 320));
 	}
 

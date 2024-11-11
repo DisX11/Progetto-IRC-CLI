@@ -5,18 +5,25 @@ import java.util.UUID;
 public class Channel {
 	private final String nomeChannel;
 	private ArrayList<ThreadCommunication> clientConnectionList;
-	
+	private Server server;
 
-	public Channel(String nome) {
+	public Channel(String nome, Server server) {
 		super();
 		this.clientConnectionList = new ArrayList<>();
 		this.nomeChannel = nome;
+		this.server=server;
 	}
 
 	public String getNomeChannel() { return nomeChannel;}
 
 	public void addClient(Socket clientSocket) {
 		clientConnectionList.add(new ThreadCommunication(this, clientSocket));
+	}
+	public void addClient(ThreadCommunication client) {
+		clientConnectionList.add(client);
+		if (!isNomeClientOK(client, client.getClientName())) {
+			client.setClientName(generaNomeClient());
+		}
 	}
 
 	public void inoltro(Pacchetto pacchetto, long threadMittenteId) {
@@ -49,15 +56,18 @@ public class Channel {
 	}
 
 	public boolean isNomeClientOK(ThreadCommunication caller, String requestedName) {
+		//se rispetta i requisiti per i nomi client
 		if(requestedName==null || requestedName.isEmpty() || requestedName.matches("^[^a-zA-Z0-9_]*$") || requestedName.startsWith("Client")) {
 			return false;
 		} else {
+			//se non è già presente un client con lo stesso nome richiesto
 			for (ThreadCommunication thread : clientConnectionList) {
 				if(thread.threadId()!=caller.threadId() && thread.getClientName().equals(requestedName)) {
 					return false;
 				}
 			}
 		}
+		//allora il nome richiesto è accettabile
 		return true;
 	}
 
@@ -74,6 +84,19 @@ public class Channel {
 		return s;
 	}
 
+	public void switchChannel(String channelName, ThreadCommunication caller) {
+		server.switchChannel(channelName, caller);
+		removeClient(caller);
+	}
+
+	private void removeClient(ThreadCommunication caller) {
+		clientConnectionList.remove(caller);
+		if (clientConnectionList.size()==0) {
+			server.removeChannel(this);
+		}
+	}
+	
+	/* 
 	public void mute(String targetName, int timeSpan) {
 		clientConnectionList.forEach((thread) -> {
 			if (thread.getClientName().equals(targetName)) {
@@ -81,9 +104,10 @@ public class Channel {
 			}
 		});
 	}
+	*/
 
 	public void chiudiSocket(ThreadCommunication threadToClose) {
-		clientConnectionList.remove(threadToClose);
+		removeClient(threadToClose);
 		System.out.println("Rimuovo un client dal channel.");
 	}
 }
