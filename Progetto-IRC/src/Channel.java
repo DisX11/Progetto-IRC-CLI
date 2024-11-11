@@ -1,6 +1,7 @@
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class Channel {
 	private final String nomeChannel;
@@ -17,7 +18,10 @@ public class Channel {
 	public String getNomeChannel() { return nomeChannel;}
 
 	public void addClient(Socket clientSocket) {
-		clientConnectionList.add(new ThreadCommunication(this, clientSocket));
+		ThreadCommunication c = new ThreadCommunication(this, clientSocket);
+		if(clientConnectionList.isEmpty())c.giveAdmin();
+		clientConnectionList.add(c);
+		
 	}
 	public void addClient(ThreadCommunication client) {
 		clientConnectionList.add(client);
@@ -57,7 +61,7 @@ public class Channel {
 
 	public boolean isNomeClientOK(ThreadCommunication caller, String requestedName) {
 		//se rispetta i requisiti per i nomi client
-		if(requestedName==null || requestedName.isEmpty() || requestedName.matches("^[^a-zA-Z0-9_]*$") || requestedName.startsWith("Client")) {
+		if(requestedName==null || requestedName.isEmpty() || requestedName.matches("^[^a-zA-Z0-9_]*$") || requestedName.contains(" ") || requestedName.startsWith("Client")) {
 			return false;
 		} else {
 			//se non è già presente un client con lo stesso nome richiesto
@@ -105,6 +109,28 @@ public class Channel {
 		});
 	}
 	*/
+
+	public void kick(String clientName) {
+		clientConnectionList.forEach((thread) -> {
+			if(thread.getClientName().equals(clientName)) {
+				removeClient(thread);
+				return;
+			}
+		});
+	}
+
+	public void updateAdmin(String electedClientName) {
+		if(electedClientName==null) {
+			clientConnectionList.getFirst().giveAdmin();
+		} else {
+			clientConnectionList.forEach((thread)->{
+				if(thread.getClientName().equals(electedClientName)) {
+					thread.giveAdmin();
+					return;
+				}
+			});
+		}
+	}
 
 	public void chiudiSocket(ThreadCommunication threadToClose) {
 		removeClient(threadToClose);

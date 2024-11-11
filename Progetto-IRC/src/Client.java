@@ -112,6 +112,10 @@ public class Client extends Thread{
 						System.out.println(entrata.getMess());
 						invia(new Pacchetto("alert 'muted' ricevuto",entrata.getCode()+1));
 					}*/
+					case 360 -> {
+						invia(new Pacchetto("",entrata.getCode()+1));
+						System.out.println(entrata.getMess());
+					}
 					case 411 -> {
 						System.out.println("Termina comunicazione con: "+entrata);
 						chiudiSocket();

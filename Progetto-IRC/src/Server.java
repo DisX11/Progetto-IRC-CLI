@@ -74,7 +74,7 @@ public class Server{
 
 	public boolean isNomeChannelOK(String requestedName) {
 		//se rispetta i requisiti per i nomi client
-		if(requestedName==null || requestedName.isEmpty() || requestedName.matches("^[^a-zA-Z0-9_]*$") || requestedName.startsWith("Client")) {
+		if(requestedName==null || requestedName.isEmpty() || requestedName.matches("^[^a-zA-Z0-9_]*$") || requestedName.contains(" ") || requestedName.startsWith("Client")) {
 			return false;
 		} else {
 			return true;

@@ -1,12 +1,14 @@
 # TODO:
 ### priorità alta:
-- [ ] controllare messaggio errore x non possibilità cambio nick
+- [ ] thread mancante in threadCommunication per ricezione conferma (matei)
+- [ ] /kick (510)
 - [ ] threadCommunication si salva se il proprio client ha o men o i privilegi da admin. (così più client possono essere admin)
-- [ ] /assign user role mantenere(bool) (pacchetto unico per aggiunta/cambio admin) (510)
-- [ ] /kick (520)
+- [ ] /assign user role mantenere(bool) (pacchetto unico per aggiunta/cambio admin) (520)
 - [ ] admin può cambiare nome al channel
 - [ ] /mute (530)
 - [ ] invertire 330 con 340 (lo sa matei)
+- [ ] completare opzioni parametri di /info
+- [ ] thread.toString() completo di ruoli
 - [x] fix confermaRicezione
 - [x] ordinamento delle operazioni in metodi opportuni
 - [x] whisper
@@ -81,6 +83,10 @@ codice 340:
 codice 350: (DA FARE)
     alert uscita canale
     [conferma delivery: 341]
+
+codice 360:
+    errore impossibilità /kick per mancati privilegi
+    [conferma delivery: 361]
 
 ---
 CLASSI DI CODICI

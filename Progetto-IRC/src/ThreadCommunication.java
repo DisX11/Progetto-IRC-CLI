@@ -3,21 +3,22 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class ThreadCommunication extends Thread{
+public class ThreadCommunication extends Thread {
 	private final Socket clientSocket;
 	private Channel channel;
-
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private String clientName;
 	private boolean confermaRicezione;
 	private boolean currentlyMuted;
+	private boolean hasAdminRole;
 
 	public ThreadCommunication(Channel channel, Socket clientSocket) {
 		super();
 		this.channel=channel;
 		this.clientSocket=clientSocket;
 		this.currentlyMuted=false;
+		this.hasAdminRole=false;
 
 		try {
 			out=new ObjectOutputStream(clientSocket.getOutputStream());
@@ -37,11 +38,18 @@ public class ThreadCommunication extends Thread{
 	public void setClientName(String newName) {
 		this.clientName=newName;
 	}
-	
+
 	public void setChannel(Channel channel) {
 		this.channel = channel;
 	}
 	
+	public void giveAdmin() {
+		hasAdminRole=true;
+	}
+	public void revokeAdmin(){
+		hasAdminRole=false;
+	}
+
 	@Override
     public void run() {
 		connetti();
@@ -117,10 +125,17 @@ public class ThreadCommunication extends Thread{
 					case 341 -> {
 						System.out.println(clientName+": "+pacchetto.getMess());
 					}*/
+					case 361 -> {
+						System.out.println("Conferma ricezione ricevuta di mancati privilegi per /kick.");
+					}
 					case 410 -> {
 						chiudiSocket();
 						closed = true;
                     }
+					case 510 -> {
+						invia(new Pacchetto("Richiesta /kick ricevuta.",pacchetto.getCode()+1));
+						kick(pacchetto.getMess());
+					}
 					case 530 -> {
 						invia(new Pacchetto("",531));
 						String targetName=pacchetto.getMess().split(" ",2)[0];
@@ -141,7 +156,7 @@ public class ThreadCommunication extends Thread{
 	public void invia(Pacchetto pacchetto) {
 		try {
 			confermaRicezione=pacchetto.getCode()%10==1;
-			if (pacchetto.getCode()==330) confermaRicezione=false;
+			//if (pacchetto.getCode()==330) confermaRicezione=false;
 			//i codici esenti indicano messaggi che non necessitano di conferma della ricezione
 			do {
 				out.writeObject(pacchetto);
@@ -189,8 +204,17 @@ public class ThreadCommunication extends Thread{
 		channel.switchChannel(channelName, this);
 	}
 
+	private void kick(String clientName) {
+		if(hasAdminRole) {
+			channel.kick(clientName);
+		} else {
+			invia(new Pacchetto("Privilegi necessari non rilevati. Impossibile eseguire /kick.",360));
+		}
+	}
+
 	private void chiudiSocket() {
 		channel.chiudiSocket(this);
+		if(hasAdminRole)channel.updateAdmin(null);
 		if(clientSocket.isClosed())return;
 		try {
 			out.writeObject(new Pacchetto("Connessione terminata.", 411));
@@ -205,4 +229,6 @@ public class ThreadCommunication extends Thread{
 	public String toString() {
 		return clientName+" [muted: "+currentlyMuted+"]";
 	}
+
+	
 }
