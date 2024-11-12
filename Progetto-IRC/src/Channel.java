@@ -1,8 +1,6 @@
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.UUID;
-import java.util.function.Consumer;
-
 public class Channel {
 	private final String nomeChannel;
 	private ArrayList<ThreadCommunication> clientConnectionList;
@@ -113,7 +111,7 @@ public class Channel {
 	public void kick(String clientName) {
 		clientConnectionList.forEach((thread) -> {
 			if(thread.getClientName().equals(clientName)) {
-				removeClient(thread);
+				thread.chiudiSocket();
 				return;
 			}
 		});

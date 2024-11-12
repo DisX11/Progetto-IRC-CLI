@@ -12,6 +12,7 @@ public class ThreadCommunication extends Thread {
 	private boolean confermaRicezione;
 	private boolean currentlyMuted;
 	private boolean hasAdminRole;
+	private boolean closed=false;
 
 	public ThreadCommunication(Channel channel, Socket clientSocket) {
 		super();
@@ -41,6 +42,13 @@ public class ThreadCommunication extends Thread {
 
 	public void setChannel(Channel channel) {
 		this.channel = channel;
+	}
+	public Channel getChannel() {
+		return channel;
+	}
+
+	public void setConfermaRicezione(boolean confermaRicezione) {
+		this.confermaRicezione=confermaRicezione;
 	}
 	
 	public void giveAdmin() {
@@ -77,8 +85,8 @@ public class ThreadCommunication extends Thread {
 			chiudiSocket();
 		}
 	}
-
-	private void ricevi() {
+	//spostato in ThreadCommunicationRicezione
+	/*private void ricevi() {
         try {
             boolean closed=false;
             while (!closed) {
@@ -118,13 +126,13 @@ public class ThreadCommunication extends Thread {
 						}
 						//risponde con il nome "definitivo" del client
 						invia(new Pacchetto(clientName,pacchetto.getCode()+1));
-					}/* 
+					}/
 					case 331 -> {
 						System.out.println(clientName+": "+pacchetto.getMess());
 					}
 					case 341 -> {
 						System.out.println(clientName+": "+pacchetto.getMess());
-					}*/
+					}
 					case 361 -> {
 						System.out.println("Conferma ricezione ricevuta di mancati privilegi per /kick.");
 					}
@@ -151,7 +159,86 @@ public class ThreadCommunication extends Thread {
 			System.out.println("Client disconnesso in modo inopportuno");
 			chiudiSocket();
         }
-    }
+    }*/
+	private void ricevi() {
+        try {
+            
+            while (!closed) {
+                Pacchetto pacchetto=(Pacchetto) in.readObject();
+				
+				ThreadElaborazione t=new ThreadElaborazione(this, pacchetto);
+				t.start();
+				/* 
+				System.out.println("Oggetto ricevuto da "+clientName+": " + pacchetto);
+				if(pacchetto.getCode()%10==1) confermaRicezione=true; //tutti i messaggi **1 sono conferme di avvenuta ricezione
+				switch (pacchetto.getCode()) {
+					case 110 ->{
+						//implementa cambio canale
+						invia(new Pacchetto("Richiesta switch channel ricevuta",pacchetto.getCode()+1));
+						switchChannel(pacchetto.getMess());
+					}
+					case 200 -> {
+						invia(new Pacchetto("",pacchetto.getCode()+1));
+						pacchetto.setMess(clientName+" "+pacchetto.getMess());
+						messInUscita(pacchetto);
+                    }
+					case 210 -> {
+						invia(new Pacchetto("",pacchetto.getCode()+1));
+						messInUscita(pacchetto);
+                    }
+					case 301 -> {
+						System.out.println("Join alert received by "+clientName);
+					}
+					case 310 -> {
+						System.out.println(clientName+" has requested the participant list of "+channel.getNomeChannel()+".");
+						invia(new Pacchetto(channel.getPartString(),pacchetto.getCode()+1));
+					}
+					case 320 -> {
+						String[] content=pacchetto.getMess().split(" ", 2);//[0]=currentName [1]=requestedName
+
+						if(channel.isNomeClientOK(this, content[1])) {
+							System.out.println("Richiesta da "+clientName+" di cambio nickname approvata: {"+clientName+"} diventa {"+content[1]+"}.");
+							setClientName(content[1]);
+						} else {
+							System.out.println("Richiesta da "+clientName+" di cambio nickname non approvata.");
+						}
+						//risponde con il nome "definitivo" del client
+						invia(new Pacchetto(clientName,pacchetto.getCode()+1));
+					}/
+					case 331 -> {
+						System.out.println(clientName+": "+pacchetto.getMess());
+					}
+					case 341 -> {
+						System.out.println(clientName+": "+pacchetto.getMess());
+					}
+					case 361 -> {
+						System.out.println("Conferma ricezione ricevuta di mancati privilegi per /kick.");
+					}
+					case 410 -> {
+						chiudiSocket();
+						closed = true;
+                    }
+					case 510 -> {
+						invia(new Pacchetto("Richiesta /kick ricevuta.",pacchetto.getCode()+1));
+						kick(pacchetto.getMess());
+					}
+					case 530 -> {
+						invia(new Pacchetto("",531));
+						String targetName=pacchetto.getMess().split(" ",2)[0];
+						int timeSpan=Integer.parseInt(pacchetto.getMess().split(" ",2)[1]);
+						System.out.println(clientName+" has requested to mute "+targetName+" for "+timeSpan+" seconds.");
+						//check if admin, then below (TODO)
+						//channel.mute(targetName,timeSpan);
+					}
+				}
+				*/
+			}
+        } catch (IOException | ClassNotFoundException e) {
+            //e.printStackTrace();
+			System.out.println("Client disconnesso in modo inopportuno.");
+			chiudiSocket();
+        }
+	}
 
 	public void invia(Pacchetto pacchetto) {
 		try {
@@ -168,7 +255,7 @@ public class ThreadCommunication extends Thread {
 		}
 	}
 
-	private void messInUscita(Pacchetto pacchetto) {
+	public void messInUscita(Pacchetto pacchetto) {
 		//if (!currentlyMuted) {
 			switch (pacchetto.getCode()) {
 				case 200 -> {
@@ -200,11 +287,11 @@ public class ThreadCommunication extends Thread {
 		}
 	}*/
 
-	private void switchChannel(String channelName){
+	public void switchChannel(String channelName){
 		channel.switchChannel(channelName, this);
 	}
 
-	private void kick(String clientName) {
+	public void kick(String clientName) {
 		if(hasAdminRole) {
 			channel.kick(clientName);
 		} else {
@@ -212,7 +299,7 @@ public class ThreadCommunication extends Thread {
 		}
 	}
 
-	private void chiudiSocket() {
+	public void chiudiSocket() {
 		channel.chiudiSocket(this);
 		if(hasAdminRole)channel.updateAdmin(null);
 		if(clientSocket.isClosed())return;
