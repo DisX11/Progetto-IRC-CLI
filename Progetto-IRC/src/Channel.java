@@ -1,5 +1,6 @@
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.UUID;
 public class Channel {
 	private final String nomeChannel;
@@ -22,6 +23,8 @@ public class Channel {
 		
 	}
 	public void addClient(ThreadCommunication client) {
+		if(clientConnectionList.isEmpty())client.giveAdmin();
+		
 		clientConnectionList.add(client);
 		if (!isNomeClientOK(client, client.getClientName())) {
 			client.setClientName(generaNomeClient());
@@ -98,7 +101,7 @@ public class Channel {
 		}
 	}
 	
-	/* 
+	
 	public void mute(String targetName, int timeSpan) {
 		clientConnectionList.forEach((thread) -> {
 			if (thread.getClientName().equals(targetName)) {
@@ -106,19 +109,23 @@ public class Channel {
 			}
 		});
 	}
-	*/
+	
 
 	public void kick(String clientName) {
-		clientConnectionList.forEach((thread) -> {
-			if(thread.getClientName().equals(clientName)) {
-				thread.chiudiSocket();
-				return;
-			}
-		});
+		try {
+			clientConnectionList.forEach((thread) -> {
+				if(thread.getClientName().equals(clientName)) {
+					thread.chiudiSocket();
+					return;
+				}
+			});
+		} catch (ConcurrentModificationException e) {
+			//
+		}
 	}
 
 	public void updateAdmin(String electedClientName) {
-		if(electedClientName==null) {
+		if(electedClientName==null && !clientConnectionList.isEmpty()) {
 			clientConnectionList.getFirst().giveAdmin();
 		} else {
 			clientConnectionList.forEach((thread)->{

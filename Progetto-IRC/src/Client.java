@@ -30,6 +30,10 @@ public class Client extends Thread{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
+	public Socket getSocket() {
+        return client;
+    }
 	
 	private void connetti() {
 		try {
@@ -104,14 +108,13 @@ public class Client extends Thread{
 						nome=entrata.getMess();
 						System.out.println("Risposta dal server sulla richiesta di cambio nickname. Nome attuale: "+nome);
 					}
-					/*case 330 -> {
+					case 330 -> {
+						System.out.println(entrata.getMess());
+						invia(new Pacchetto("alert 'muted' ricevuto",entrata.getCode()+1));
+					}case 340 -> {
 						System.out.println(entrata.getMess());
 						invia(new Pacchetto("errore 'muted' ricevuto",entrata.getCode()+1));
 					}
-					case 340 -> {
-						System.out.println(entrata.getMess());
-						invia(new Pacchetto("alert 'muted' ricevuto",entrata.getCode()+1));
-					}*/
 					case 360 -> {
 						invia(new Pacchetto("",entrata.getCode()+1));
 						System.out.println(entrata.getMess());
@@ -179,4 +182,6 @@ public class Client extends Thread{
 			System.exit(1);
 		}
 	}
+
+    
 }

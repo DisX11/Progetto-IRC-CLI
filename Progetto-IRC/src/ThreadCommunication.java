@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ThreadCommunication extends Thread {
 	private final Socket clientSocket;
@@ -57,6 +59,9 @@ public class ThreadCommunication extends Thread {
 	public void revokeAdmin(){
 		hasAdminRole=false;
 	}
+	public boolean isAdmin(){
+		return hasAdminRole;
+	}
 
 	@Override
     public void run() {
@@ -85,81 +90,7 @@ public class ThreadCommunication extends Thread {
 			chiudiSocket();
 		}
 	}
-	//spostato in ThreadCommunicationRicezione
-	/*private void ricevi() {
-        try {
-            boolean closed=false;
-            while (!closed) {
-                Pacchetto pacchetto=(Pacchetto) in.readObject();
-				System.out.println("Oggetto ricevuto da "+clientName+": " + pacchetto);
-				if(pacchetto.getCode()%10==1) confermaRicezione=true; //tutti i messaggi **1 sono conferme di avvenuta ricezione
-				switch (pacchetto.getCode()) {
-					case 110 ->{
-						//implementa cambio canale
-						invia(new Pacchetto("Richiesta switch channel ricevuta",pacchetto.getCode()+1));
-						switchChannel(pacchetto.getMess());
-					}
-					case 200 -> {
-						invia(new Pacchetto("",pacchetto.getCode()+1));
-						pacchetto.setMess(clientName+" "+pacchetto.getMess());
-						messInUscita(pacchetto);
-                    }
-					case 210 -> {
-						invia(new Pacchetto("",pacchetto.getCode()+1));
-						messInUscita(pacchetto);
-                    }
-					case 301 -> {
-						System.out.println("Join alert received by "+clientName);
-					}
-					case 310 -> {
-						System.out.println(clientName+" has requested the participant list of "+channel.getNomeChannel()+".");
-						invia(new Pacchetto(channel.getPartString(),pacchetto.getCode()+1));
-					}
-					case 320 -> {
-						String[] content=pacchetto.getMess().split(" ", 2);//[0]=currentName [1]=requestedName
-
-						if(channel.isNomeClientOK(this, content[1])) {
-							System.out.println("Richiesta da "+clientName+" di cambio nickname approvata: {"+clientName+"} diventa {"+content[1]+"}.");
-							setClientName(content[1]);
-						} else {
-							System.out.println("Richiesta da "+clientName+" di cambio nickname non approvata.");
-						}
-						//risponde con il nome "definitivo" del client
-						invia(new Pacchetto(clientName,pacchetto.getCode()+1));
-					}/
-					case 331 -> {
-						System.out.println(clientName+": "+pacchetto.getMess());
-					}
-					case 341 -> {
-						System.out.println(clientName+": "+pacchetto.getMess());
-					}
-					case 361 -> {
-						System.out.println("Conferma ricezione ricevuta di mancati privilegi per /kick.");
-					}
-					case 410 -> {
-						chiudiSocket();
-						closed = true;
-                    }
-					case 510 -> {
-						invia(new Pacchetto("Richiesta /kick ricevuta.",pacchetto.getCode()+1));
-						kick(pacchetto.getMess());
-					}
-					case 530 -> {
-						invia(new Pacchetto("",531));
-						String targetName=pacchetto.getMess().split(" ",2)[0];
-						int timeSpan=Integer.parseInt(pacchetto.getMess().split(" ",2)[1]);
-						System.out.println(clientName+" has requested to mute "+targetName+" for "+timeSpan+" seconds.");
-						//check if admin, then below (TODO)
-						//channel.mute(targetName,timeSpan);
-					}
-				}
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            //e.printStackTrace();
-			System.out.println("Client disconnesso in modo inopportuno");
-			chiudiSocket();
-        }
-    }*/
+	
 	private void ricevi() {
         try {
             
@@ -168,74 +99,11 @@ public class ThreadCommunication extends Thread {
 				
 				ThreadElaborazione t=new ThreadElaborazione(this, pacchetto);
 				t.start();
-				/* 
-				System.out.println("Oggetto ricevuto da "+clientName+": " + pacchetto);
-				if(pacchetto.getCode()%10==1) confermaRicezione=true; //tutti i messaggi **1 sono conferme di avvenuta ricezione
-				switch (pacchetto.getCode()) {
-					case 110 ->{
-						//implementa cambio canale
-						invia(new Pacchetto("Richiesta switch channel ricevuta",pacchetto.getCode()+1));
-						switchChannel(pacchetto.getMess());
-					}
-					case 200 -> {
-						invia(new Pacchetto("",pacchetto.getCode()+1));
-						pacchetto.setMess(clientName+" "+pacchetto.getMess());
-						messInUscita(pacchetto);
-                    }
-					case 210 -> {
-						invia(new Pacchetto("",pacchetto.getCode()+1));
-						messInUscita(pacchetto);
-                    }
-					case 301 -> {
-						System.out.println("Join alert received by "+clientName);
-					}
-					case 310 -> {
-						System.out.println(clientName+" has requested the participant list of "+channel.getNomeChannel()+".");
-						invia(new Pacchetto(channel.getPartString(),pacchetto.getCode()+1));
-					}
-					case 320 -> {
-						String[] content=pacchetto.getMess().split(" ", 2);//[0]=currentName [1]=requestedName
-
-						if(channel.isNomeClientOK(this, content[1])) {
-							System.out.println("Richiesta da "+clientName+" di cambio nickname approvata: {"+clientName+"} diventa {"+content[1]+"}.");
-							setClientName(content[1]);
-						} else {
-							System.out.println("Richiesta da "+clientName+" di cambio nickname non approvata.");
-						}
-						//risponde con il nome "definitivo" del client
-						invia(new Pacchetto(clientName,pacchetto.getCode()+1));
-					}/
-					case 331 -> {
-						System.out.println(clientName+": "+pacchetto.getMess());
-					}
-					case 341 -> {
-						System.out.println(clientName+": "+pacchetto.getMess());
-					}
-					case 361 -> {
-						System.out.println("Conferma ricezione ricevuta di mancati privilegi per /kick.");
-					}
-					case 410 -> {
-						chiudiSocket();
-						closed = true;
-                    }
-					case 510 -> {
-						invia(new Pacchetto("Richiesta /kick ricevuta.",pacchetto.getCode()+1));
-						kick(pacchetto.getMess());
-					}
-					case 530 -> {
-						invia(new Pacchetto("",531));
-						String targetName=pacchetto.getMess().split(" ",2)[0];
-						int timeSpan=Integer.parseInt(pacchetto.getMess().split(" ",2)[1]);
-						System.out.println(clientName+" has requested to mute "+targetName+" for "+timeSpan+" seconds.");
-						//check if admin, then below (TODO)
-						//channel.mute(targetName,timeSpan);
-					}
-				}
-				*/
+				
 			}
         } catch (IOException | ClassNotFoundException e) {
             //e.printStackTrace();
-			System.out.println("Client disconnesso in modo inopportuno.");
+			//System.out.println("Client disconnesso in modo inopportuno.");
 			chiudiSocket();
         }
 	}
@@ -243,7 +111,6 @@ public class ThreadCommunication extends Thread {
 	public void invia(Pacchetto pacchetto) {
 		try {
 			confermaRicezione=pacchetto.getCode()%10==1;
-			//if (pacchetto.getCode()==330) confermaRicezione=false;
 			//i codici esenti indicano messaggi che non necessitano di conferma della ricezione
 			do {
 				out.writeObject(pacchetto);
@@ -256,7 +123,7 @@ public class ThreadCommunication extends Thread {
 	}
 
 	public void messInUscita(Pacchetto pacchetto) {
-		//if (!currentlyMuted) {
+		if (!currentlyMuted) {
 			switch (pacchetto.getCode()) {
 				case 200 -> {
 					channel.inoltro(pacchetto, this.threadId());
@@ -266,12 +133,12 @@ public class ThreadCommunication extends Thread {
 					channel.whisper(this, split[0], new Pacchetto(clientName+" "+split[1],pacchetto.getCode()));//invio del whisper al destinatario
 				}
 			}
-		/* } else {
+		} else {
 			invia(new Pacchetto("Azione temporaneamente non consentita, sei stato mutato.",330));
-		}*/
+		}
 	}
 
-	/*public void mute(boolean bool, int timeSpan) {
+	public void mute(boolean bool, int timeSpan) {
 		if(!currentlyMuted) {
 			invia(new Pacchetto("Sei stato mutato per "+timeSpan+" secondi.",340));
 			currentlyMuted=bool;
@@ -279,13 +146,16 @@ public class ThreadCommunication extends Thread {
 			TimerTask task = new TimerTask() {
 				@Override
 				public void run() {
-					currentlyMuted=false;
-					invia(new Pacchetto("Sei stato riattivato.",340));
+					if(!clientSocket.isClosed()){
+						currentlyMuted=false;
+						invia(new Pacchetto("Sei stato riattivato.",340));
+					}
+					
 				}
 			};
 			timer.schedule(task, timeSpan*1000);
 		}
-	}*/
+	}
 
 	public void switchChannel(String channelName){
 		channel.switchChannel(channelName, this);

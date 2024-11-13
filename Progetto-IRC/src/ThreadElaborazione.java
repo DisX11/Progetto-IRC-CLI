@@ -1,5 +1,3 @@
-import java.io.IOException;
-import java.io.ObjectInputStream;
 
 public class ThreadElaborazione extends Thread{
 
@@ -52,13 +50,13 @@ public class ThreadElaborazione extends Thread{
 				}
 				//risponde con il nome "definitivo" del client
 				tC.invia(new Pacchetto(tC.getClientName(),pacchetto.getCode()+1));
-			}/* 
+			}
 			case 331 -> {
-				System.out.println(clientName+": "+pacchetto.getMess());
+				System.out.println(tC.getClientName()+": "+pacchetto.getMess());
 			}
 			case 341 -> {
-				System.out.println(clientName+": "+pacchetto.getMess());
-			}*/
+				System.out.println(tC.getClientName()+": "+pacchetto.getMess());
+			}
 			case 361 -> {
 				System.out.println("Conferma ricezione ricevuta di mancati privilegi per /kick.");
 			}
@@ -74,8 +72,12 @@ public class ThreadElaborazione extends Thread{
 				String targetName=pacchetto.getMess().split(" ",2)[0];
 				int timeSpan=Integer.parseInt(pacchetto.getMess().split(" ",2)[1]);
 				System.out.println(tC.getClientName()+" has requested to mute "+targetName+" for "+timeSpan+" seconds.");
-				//check if admin, then below (TODO)
-				//channel.mute(targetName,timeSpan);
+				
+				if(tC.isAdmin()){
+					tC.getChannel().mute(targetName,timeSpan);
+				}else{
+					tC.invia(new Pacchetto("Privilegi necessari non rilevati. Impossibile eseguire /mute.",340));
+				}
 			}
 		}
             

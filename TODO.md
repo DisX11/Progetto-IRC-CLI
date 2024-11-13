@@ -1,14 +1,18 @@
 # TODO:
 ### priorità alta:
-- [ ] thread mancante in threadCommunication per ricezione conferma (matei)
-- [ ] /kick (510)
-- [ ] threadCommunication si salva se il proprio client ha o men o i privilegi da admin. (così più client possono essere admin)
-- [ ] /assign user role mantenere(bool) (pacchetto unico per aggiunta/cambio admin) (520)
-- [ ] admin può cambiare nome al channel
-- [ ] /mute (530)
-- [ ] invertire 330 con 340 (lo sa matei)
+- [ ] pulizia codice(print di pacchetti e messaggi, uniformare nomi variabili, ordinamento codici, ecc.)
+- [ ] /assign user (pacchetto unico per aggiunta/cambio admin) (520)
+- [ ] admin può cambiare nome al channel (?)
 - [ ] completare opzioni parametri di /info
 - [ ] thread.toString() completo di ruoli
+- [ ] nomi channel con prefisso '#'
+- [ ] /info admin restituisce il nick dell'admin presente sul canale (?)
+- [x] /mute (530)
+- [x] fix problema se client quitta prima della fine del mute
+- [x] thread mancante in threadCommunication per ricezione conferma (matei)
+- [x] assegnazione admin quando il vecchio admin esce
+- [x] /kick (510)
+- [x] threadCommunication si salva se il proprio client ha o men o i privilegi da admin.
 - [x] fix confermaRicezione
 - [x] ordinamento delle operazioni in metodi opportuni
 - [x] whisper
@@ -22,7 +26,7 @@
 
 ### priorità bassa:
 - [ ] [text](https://github.com/inspircd/inspircd/releases/tag/v4.4.0)
-- [ ] Controllo Duplicati
+- [ ] Controllo Duplicati (?)
 - [ ] Replica protocollo reale
 - [ ] studio protocollo reale (x idee implementazioni)
 - [ ] documentazione completa codice
@@ -39,7 +43,8 @@
 - [x] Git
 - [x] README e TODO
 - [ ] ...
-
+  
+---
 ## dettagli:
 ordinamento dei metodi:
     dalla ricezione dentro run al chiamare un metodo ricevi() dentro run [Client]
@@ -96,3 +101,21 @@ CLASSI DI CODICI
 300: retrieve info (server source)
 400: disconnessione/errori vari
 500: admin
+
+
+
+-----
+Test doc codici:
+
+100-199 per entrare e connettersi o cambiare, OK
+200-290 per messaggi vari nel canale(User-to-User), OK
+300-399 per messaggi con o da il server(User-ToFro-Server),OK
+410 per uscire e disconnettersi, OK
+500-599 per comandi dell'admin del canale(Admin-To-Server), OK
+
+300-399 includono le casistiche di:
+richieste di info dal canale,
+alert dal canale,
+errori dal canale,
+informazioni per il canale,
+comandi(nick,info,switch,admin?,)
