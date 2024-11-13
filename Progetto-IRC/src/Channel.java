@@ -3,9 +3,9 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.UUID;
 public class Channel {
-	private Server server;
+	private final Server server;
 	private String nomeChannel;
-	private ArrayList<ThreadCommunication> clientConnectionList;
+	private final ArrayList<ThreadCommunication> clientConnectionList;
 
 	public Channel(String nome, Server server) {
 		super();
@@ -55,7 +55,7 @@ public class Channel {
 					thread2.invia(pacchetto);
 				}
 			});
-		} else {
+		} else {//cambio codice in un classe 300
 			sender.invia(new Pacchetto("Nome client destinatario errato oppure non presente nel canale.", pacchetto.getCode()+1));
 		}
 	}
@@ -122,15 +122,8 @@ public class Channel {
 	public void switchChannel(String channelName, ThreadCommunication caller) {
 		server.switchChannel(channelName, caller);
 		removeClient(caller);
+		System.out.println("Rimuovo un client dal channel.");
 	}
-
-	private void removeClient(ThreadCommunication caller) {
-		clientConnectionList.remove(caller);
-		if (clientConnectionList.size()==0) {
-			server.removeChannel(this);
-		}
-	}
-	
 	
 	public void mute(String targetName, int timeSpan) {
 		clientConnectionList.forEach((thread) -> {
@@ -139,7 +132,6 @@ public class Channel {
 			}
 		});
 	}
-	
 
 	public void kick(String clientName) {
 		try {
@@ -155,12 +147,14 @@ public class Channel {
 	}
 
 	public void updateAdmin(ThreadCommunication previousAdmin, String electedClientName) {
-		previousAdmin.revokeAdmin();
+		
 		if(electedClientName==null && !clientConnectionList.isEmpty()) {
+			previousAdmin.revokeAdmin();
 			clientConnectionList.getFirst().giveAdmin();
 		} else {
 			clientConnectionList.forEach((thread)->{
 				if(thread.getClientName().equals(electedClientName)) {
+					previousAdmin.revokeAdmin();
 					thread.giveAdmin();
 					return;
 				}
@@ -169,7 +163,7 @@ public class Channel {
 	}
 
 	public void renameChannel(ThreadCommunication caller, String requestedChannelName) {
-		if(this.nomeChannel=="MasterChannel") {
+		if(this.nomeChannel.equals("MasterChannel")) {
 			caller.invia(new Pacchetto("Richiesta /rename non approvata. Impossibile rinominare #MasterChannel", 370));
 		} else {
 			if(server.isNomeChannelOK(requestedChannelName)) {
@@ -181,8 +175,10 @@ public class Channel {
 		}
 	}
 
-	public void chiudiSocket(ThreadCommunication threadToClose) {
-		removeClient(threadToClose);
-		System.out.println("Rimuovo un client dal channel.");
+	public void removeClient(ThreadCommunication caller) {
+		clientConnectionList.remove(caller);
+		if (clientConnectionList.isEmpty()) {
+			server.removeChannel(this);
+		}
 	}
 }

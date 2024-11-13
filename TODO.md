@@ -1,7 +1,8 @@
 # TODO:
 ### priorità alta:
-- [ ] pulizia codice(print di pacchetti e messaggi, uniformare nomi variabili, ordinamento codici, ecc.)
-- [ ] nomi channel con prefisso '#'
+- [ ] pulizia codice(print di pacchetti e messaggi, uniformare nomi variabili, unificazione codici, ecc.)
+- [ ] unificazione codici in categorie: alert, not permitter per non-admin, errors(sintassi, target not found, ecc.)
+- [x] nomi channel con prefisso '#'
 - [x] /info admin : restituisce il nick dell'admin presente sul canale (?)
 - [x] /info channelsList : restituisce la lista dei canali attivi sul server, per permettere di scegliere/esserne al corrente
 - [x] thread.toString() completo di ruoli
@@ -113,11 +114,11 @@ CLASSI DI CODICI
 -----
 Test doc codici:
 
-100-199 per entrare e connettersi o cambiare, OK
-200-290 per messaggi vari nel canale(User-to-User), OK
-300-399 per messaggi con o da il server(User-ToFro-Server),OK
-410 per uscire e disconnettersi, OK
-500-599 per comandi dell'admin del canale(Admin-To-Server), OK
+100-199 per entrare e connettersi o cambiare
+200-299 per messaggi vari nel canale(User-to-User)
+300-399 per messaggi con o da il server(User-ToFro-Server)
+410 per uscire e disconnettersi
+500-599 per comandi dell'admin del canale(Admin-To-Server)
 
 300-399 includono le casistiche di:
 richieste di info dal canale,

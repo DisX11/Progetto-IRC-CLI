@@ -34,11 +34,12 @@ public class TestClient2 {
 					System.out.println("Action: Give up the admin role in favor of another user\nSyntax: /promote clientName\n(this action cannot be undone)");
 				} else if(input.equals("/rename ?")) {
 					System.out.println("Action: Change this channel's name\nSyntax: /rename requestedChannelName\n");
+
 				} else if(input.equals("/quit")) {
-					client.invia(new Pacchetto("",410));
+					client.quit();
 				} else if(input.startsWith("/whisper")) {
 					String[] segments = input.split(" ",3);
-					client.invia(new Pacchetto(segments[1]+" "+segments[2],210));
+					client.whisper(segments[1]+" "+segments[2]);
 				} else if(input.startsWith("/nick")) {
 					String[] segments = input.split(" ",2);
 					client.changeNick(segments[1]);
@@ -50,11 +51,11 @@ public class TestClient2 {
 					try {
 						client.mute(segments[1], Integer.parseInt(segments[2]));
 					} catch(NumberFormatException ex) {
-						System.out.println("Wrong type input (targetName must be Sting ; timeSpan must be integer).");
+						System.out.println("Wrong type input (targetName must be String ; timeSpan must be integer).");
 					}
 				} else if(input.startsWith("/switch")) {
 					String[] segments = input.split(" ",2);
-					client.invia(new Pacchetto(segments[1], 110));
+					client.switchChannel(segments[1]);
 				} else if(input.startsWith("/kick")) {
 					String[] segments = input.split(" ",2);
 					client.kick(segments[1]);
@@ -65,7 +66,7 @@ public class TestClient2 {
 					String[] segments = input.split(" ",2);
 					client.renameChannel(segments[1]);
 				} else {
-					client.invia(new Pacchetto(input,200));
+					client.mess(input);
 				}
 
 			} while (!input.equals("/quit") && !client.getSocket().isClosed());

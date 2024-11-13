@@ -159,7 +159,7 @@ public class Client extends Thread{
 		}
 	}
 	
-	public void invia(Pacchetto pacchetto) {
+	private void invia(Pacchetto pacchetto) {
 		try {
 			confermaRicezione=pacchetto.getCode()%10==1;
 			//i codici esenti indicano messaggi che non necessitano di conferma della ricezione
@@ -172,6 +172,18 @@ public class Client extends Thread{
             e.printStackTrace();
         }
     }
+
+	public void mess(String message) {
+		invia(new Pacchetto(nome+" "+message, 200));
+	}
+
+	public void whisper(String message) {
+		invia(new Pacchetto(nome+" "+message, 210));
+	}
+	
+	public void switchChannel(String channelName) {
+		invia(new Pacchetto(channelName, 110));
+	}
 
 	public void changeNick(String newNick) {
 		invia(new Pacchetto(nome+" "+newNick, 320));
@@ -195,6 +207,10 @@ public class Client extends Thread{
 
 	public void renameChannel(String requestedChannelName) {
 		invia(new Pacchetto(requestedChannelName, 540));
+	}
+
+	public void quit() {
+		invia(new Pacchetto("",410));
 	}
 
 	private void chiudiSocket() {

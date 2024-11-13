@@ -10,10 +10,10 @@ public class ThreadElaborazione extends Thread{
     }
     @Override
     public void run() {
-		ricevi();
+		elabora();
     }
 
-    private void ricevi() {
+    private void elabora() {
         
 		System.out.println("Oggetto ricevuto da "+tC.getClientName()+": " + pacchetto);
 		if(pacchetto.getCode()%10==1) tC.setConfermaRicezione(true); //tutti i messaggi **1 sono conferme di avvenuta ricezione

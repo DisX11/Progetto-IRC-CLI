@@ -9,12 +9,15 @@ public class Server{
 	private int porta;
 	private  Socket clientSocket;
 	private ArrayList<Channel> channelList;
+	private Channel mainChannel;
 	
 	public Server(int porta) {
 		super();
 		this.porta = porta;
 		clientSocket=null;
 		channelList = new ArrayList<>();
+		
+		mainChannel = new Channel("MasterChannel", this);
 	}
 	
 	public void avvia() {
@@ -69,6 +72,7 @@ public class Server{
 	}
 
 	public void removeChannel(Channel channel){
+		if(channel==mainChannel)
 		channelList.remove(channel);
 	}
 

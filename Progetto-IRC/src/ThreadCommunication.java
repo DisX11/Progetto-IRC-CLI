@@ -114,7 +114,7 @@ public class ThreadCommunication extends Thread {
 			//i codici esenti indicano messaggi che non necessitano di conferma della ricezione
 			do {
 				out.writeObject(pacchetto);
-				System.out.println(channel.getNomeChannel()+" invia a "+clientName+": "+pacchetto);
+				System.out.println("#"+channel.getNomeChannel()+" invia a "+clientName+": "+pacchetto);
 				Thread.sleep(200);
 			}while(!confermaRicezione);
 		} catch (IOException | InterruptedException e) {
@@ -186,7 +186,7 @@ public class ThreadCommunication extends Thread {
 	}
 
 	public void chiudiSocket() {
-		channel.chiudiSocket(this);
+		channel.removeClient(this);
 		if(hasAdminRole)channel.updateAdmin(this, null);
 		if(clientSocket.isClosed())return;
 		try {
@@ -202,10 +202,9 @@ public class ThreadCommunication extends Thread {
 
 	public String toString() {
 		String s=clientName;
-		if(isAdmin()) {
-			s+=" [admin]";
-		}
-		s+=" [muted: "+currentlyMuted+"]";
+		if(isAdmin()) s+=" [admin]";
+		if(currentlyMuted) s+=" [muted]";
+		
 		return s;
 	}
 }
