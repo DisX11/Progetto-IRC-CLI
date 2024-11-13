@@ -1,13 +1,13 @@
 # TODO:
 ### priorità alta:
 - [ ] pulizia codice(print di pacchetti e messaggi, uniformare nomi variabili, ordinamento codici, ecc.)
-- [ ] forEach() semplificati in get(indexOf()) passando l'intero thread al metodo
-- [ ] admin può cambiare nome al channel (?)
 - [ ] thread.toString() completo di ruoli
 - [ ] nomi channel con prefisso '#'
 - [ ] completare opzioni parametri di /info
 - [ ] /info admin : restituisce il nick dell'admin presente sul canale (?)
 - [ ] /info channelList : restituisce la lista dei canali attivi sul server, per permettere di scegliere/esserne al corrente
+- [x] codice 350 : alert uscita canale
+- [x] /rename requestedChannelName : admin può cambiare nome al channel (540)
 - [x] /promote clientName (520)
 - [x] /mute (530)
 - [x] fix problema se client quitta prima della fine del mute
@@ -94,6 +94,12 @@ codice 350: (DA FARE)
 codice 360:
     errore impossibilità /kick per mancati privilegi
     [conferma delivery: 361]
+
+codice 370:
+    errore impossibilità /rename
+
+codice 380:
+    errore impossibilità /promote
 
 ---
 CLASSI DI CODICI

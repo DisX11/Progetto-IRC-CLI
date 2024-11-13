@@ -51,14 +51,14 @@ public class Server{
 
 	private Channel addChannel(String channelName) {
 		//se è presente il channel richiesto, lo restituisce
-		for (Channel channel : channelList) {
+		for(Channel channel : channelList) {
 			if(channel.getNomeChannel().equals(channelName)) {
 				return channel;
 			}
 		}
 		//se no viene creato e restituito un nuovo channel
 		String newName;
-		if (isNomeChannelOK(channelName)) {
+		if(isNomeChannelOK(channelName)) {
 			newName=channelName;
 		} else {
 			newName=generaNomeChannel();

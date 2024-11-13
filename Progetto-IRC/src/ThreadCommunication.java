@@ -170,7 +170,19 @@ public class ThreadCommunication extends Thread {
 	}
 
 	public void promote(String partialInput) {
-		channel.updateAdmin(this, partialInput);
+		if(hasAdminRole) {
+			channel.updateAdmin(this, partialInput);
+		} else {
+			invia(new Pacchetto("Privilegi necessari non rilevati. Impossibile eseguire /promote.",380));
+		}
+	}
+
+	public void renameChannel(String requestedChannelName) {
+		if(hasAdminRole) {
+			channel.renameChannel(this, requestedChannelName);
+		} else {
+			invia(new Pacchetto("Privilegi necessari non rilevati. Impossibile eseguire /rename.",370));
+		}
 	}
 
 	public void chiudiSocket() {
@@ -184,12 +196,16 @@ public class ThreadCommunication extends Thread {
 			e.printStackTrace();
 			System.out.println("Problemi nella chiusura del socket");
 		}
+		channel.inoltro(new Pacchetto(clientName+" has left the channel.", 350), this.threadId());
 		System.out.println("Chiudo il socket.");
 	}
 
 	public String toString() {
-		return clientName+" [muted: "+currentlyMuted+"]";
+		String s=clientName;
+		if(isAdmin()) {
+			s+=" [admin]";
+		}
+		s+=" [muted: "+currentlyMuted+"]";
+		return s;
 	}
-
-	
 }

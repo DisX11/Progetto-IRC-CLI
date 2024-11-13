@@ -83,6 +83,10 @@ public class ThreadElaborazione extends Thread{
 					tC.invia(new Pacchetto("Privilegi necessari non rilevati. Impossibile eseguire /mute.",340));
 				}
 			}
+			case 540 -> {
+				tC.invia(new Pacchetto("Richiesta /rename ricevuta.",pacchetto.getCode()+1));
+				tC.renameChannel(pacchetto.getMess());
+			}
 		}        
     }
 }

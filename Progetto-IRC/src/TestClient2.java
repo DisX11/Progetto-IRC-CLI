@@ -15,7 +15,7 @@ public class TestClient2 {
 				if(client.getSocket().isClosed()){
 					
 				} else if(input.equals("/?")) {
-					System.out.println("--public domain commands--\n/info : Request information of the given type;\n/whisper : Send a direct message;\n/nick : Request to change your nickname;\n/switch : Move to another channel;\n/quit : Disconnect.\n--'admin' role only commands--\n/mute : Prevent someone else to send messages;\n/kick : Remove a user from the channel;\n/promote : Give up the admin role\n(all the commands above are valid in the current channel's domain.)");
+					System.out.println("--public domain commands--\n/info : Request information of the given type;\n/whisper : Send a direct message;\n/nick : Request to change your nickname;\n/switch : Move to another channel;\n/quit : Disconnect.\n--'admin' role only commands--\n/rename : Rename this channel\n/mute : Prevent someone else to send messages;\n/kick : Remove a user from the channel;\n/promote : Give up the admin role\n(all the commands above are valid in the current channel's domain.)");
 				} else if (input.equals("/info ?")) {
 					System.out.println("Action: request information of the given type.\nSyntax: /info infoType\nTypes: all, partList, ...");			
 				} else if (input.equals("/whisper ?")) {
@@ -32,6 +32,8 @@ public class TestClient2 {
 					System.out.println("Action: kick another user out of the current channel\nSyntax: /kick clientName\n(this action cannot be undone)");
 				} else if(input.equals("/promote ?")) {
 					System.out.println("Action: Give up the admin role in favor of another user\nSyntax: /promote clientName\n(this action cannot be undone)");
+				} else if(input.equals("/rename ?")) {
+					System.out.println("Action: Change this channel's name\nSyntax: /rename requestedChannelName\n");
 				} else if(input.equals("/quit")) {
 					client.invia(new Pacchetto("",410));
 				} else if(input.startsWith("/whisper")) {
@@ -59,6 +61,9 @@ public class TestClient2 {
 				} else if(input.startsWith("/promote")) {
 					String[] segments = input.split(" ",2);
 					client.promote(segments[1]);
+				} else if(input.startsWith("/rename")) {
+					String[] segments = input.split(" ",2);
+					client.renameChannel(segments[1]);
 				} else {
 					client.invia(new Pacchetto(input,200));
 				}

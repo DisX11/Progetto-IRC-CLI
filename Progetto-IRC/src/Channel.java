@@ -3,9 +3,9 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.UUID;
 public class Channel {
-	private final String nomeChannel;
-	private ArrayList<ThreadCommunication> clientConnectionList;
 	private Server server;
+	private String nomeChannel;
+	private ArrayList<ThreadCommunication> clientConnectionList;
 
 	public Channel(String nome, Server server) {
 		super();
@@ -82,7 +82,7 @@ public class Channel {
 	}
 
 	public String getPartString() {
-		String s="";
+		String s="#"+nomeChannel+"\n";
 		for (ThreadCommunication thread : clientConnectionList) {
 			s+=thread.toString()+" ";
 		}
@@ -135,6 +135,19 @@ public class Channel {
 					return;
 				}
 			});
+		}
+	}
+
+	public void renameChannel(ThreadCommunication caller, String requestedChannelName) {
+		if(this.nomeChannel=="MasterChannel") {
+			caller.invia(new Pacchetto("Richiesta /rename non approvata. Impossibile rinominare #MasterChannel", 370));
+		} else {
+			if(server.isNomeChannelOK(requestedChannelName)) {
+				nomeChannel=requestedChannelName;
+				caller.invia(new Pacchetto("Richiesta /rename approvata.", 370));
+			} else {
+				caller.invia(new Pacchetto("Richiesta /rename non approvata.", 370));
+			}
 		}
 	}
 

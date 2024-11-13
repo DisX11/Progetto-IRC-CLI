@@ -115,7 +115,19 @@ public class Client extends Thread{
 						System.out.println(entrata.getMess());
 						invia(new Pacchetto("errore ricevuto",entrata.getCode()+1));
 					}
+					case 350 -> {
+						invia(new Pacchetto("",entrata.getCode()+1));
+						System.out.println(entrata.getMess());
+					}
 					case 360 -> {
+						invia(new Pacchetto("",entrata.getCode()+1));
+						System.out.println(entrata.getMess());
+					}
+					case 370 -> {
+						invia(new Pacchetto("",entrata.getCode()+1));
+						System.out.println(entrata.getMess());
+					}
+					case 380 -> {
 						invia(new Pacchetto("",entrata.getCode()+1));
 						System.out.println(entrata.getMess());
 					}
@@ -171,16 +183,20 @@ public class Client extends Thread{
 		}
 	}
 
-	public void mute(String targetName, int timeSpan) {
-		invia(new Pacchetto(targetName+" "+timeSpan, 530));
-	}
-
 	public void kick(String targetName) {
 		invia(new Pacchetto(targetName, 510));
 	}
 
 	public void promote(String electedClientName) {
 		invia(new Pacchetto(electedClientName, 520));
+	}
+
+	public void mute(String targetName, int timeSpan) {
+		invia(new Pacchetto(targetName+" "+timeSpan, 530));
+	}
+
+	public void renameChannel(String requestedChannelName) {
+		invia(new Pacchetto(requestedChannelName, 540));
 	}
 
 	private void chiudiSocket() {
