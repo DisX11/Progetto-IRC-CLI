@@ -17,7 +17,7 @@ public class TestClient2 {
 				} else if(input.equals("/?")) {
 					System.out.println("--public domain commands--\n/info : Request information of the given type;\n/whisper : Send a direct message;\n/nick : Request to change your nickname;\n/switch : Move to another channel;\n/quit : Disconnect.\n--'admin' role only commands--\n/rename : Rename this channel\n/mute : Prevent someone else to send messages;\n/kick : Remove a user from the channel;\n/promote : Give up the admin role\n(all the commands above are valid in the current channel's domain.)");
 				} else if (input.equals("/info ?")) {
-					System.out.println("Action: request information of the given type.\nSyntax: /info infoType\nTypes: all, partList, ...");			
+					System.out.println("Action: request information of the given type.\nSyntax: /info infoType\nTypes: partList, channelsList, admin, ...");
 				} else if (input.equals("/whisper ?")) {
 					System.out.println("Action: send a direct message\nSyntax: /whisper recipientName\n(recipientName has to be a valid client name)");	
 				} else if (input.equals("/nick ?")) {

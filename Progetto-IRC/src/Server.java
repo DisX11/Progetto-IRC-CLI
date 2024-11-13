@@ -85,4 +85,12 @@ public class Server{
 		//genero una stringa alfanumerica casuale
 		return "Channel-"+UUID.randomUUID().toString().replaceAll("_", "").substring(0,5);
 	}
+
+	public String getChannelsList() {
+		String s="";
+		for (Channel channel : channelList) {
+			s+=channel.getNomeChannel()+"\n";
+		}
+		return s;
+	}
 }

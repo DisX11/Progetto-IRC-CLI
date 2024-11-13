@@ -1,11 +1,10 @@
 # TODO:
 ### priorità alta:
 - [ ] pulizia codice(print di pacchetti e messaggi, uniformare nomi variabili, ordinamento codici, ecc.)
-- [ ] thread.toString() completo di ruoli
 - [ ] nomi channel con prefisso '#'
-- [ ] completare opzioni parametri di /info
-- [ ] /info admin : restituisce il nick dell'admin presente sul canale (?)
-- [ ] /info channelList : restituisce la lista dei canali attivi sul server, per permettere di scegliere/esserne al corrente
+- [x] /info admin : restituisce il nick dell'admin presente sul canale (?)
+- [x] /info channelsList : restituisce la lista dei canali attivi sul server, per permettere di scegliere/esserne al corrente
+- [x] thread.toString() completo di ruoli
 - [x] codice 350 : alert uscita canale
 - [x] /rename requestedChannelName : admin può cambiare nome al channel (540)
 - [x] /promote clientName (520)
@@ -62,7 +61,6 @@ codice 300:
 codice 310:
     /info [partList, all, ...]
     partList: retrieve lista participanti al canale
-    all: tutte le info del canale
     [conferma delivery: 311]
 
 codice 320:

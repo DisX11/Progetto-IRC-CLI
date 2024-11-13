@@ -36,8 +36,11 @@ public class ThreadElaborazione extends Thread{
 				System.out.println("Join alert received by "+tC.getClientName());
 			}
 			case 310 -> {
-				System.out.println(tC.getClientName()+" has requested the participant list of "+tC.getChannel().getNomeChannel()+".");
-				tC.invia(new Pacchetto(tC.getChannel().getPartString(),pacchetto.getCode()+1));
+				//conferma ricezione (311)
+				tC.invia(new Pacchetto("Richiesta /info ricevuta.",pacchetto.getCode()+1));
+				System.out.println(tC.getClientName()+" has requested the '"+pacchetto.getMess()+"' type info of "+tC.getChannel().getNomeChannel()+".");
+				//invio informazioni (310)
+				tC.invia(new Pacchetto(tC.getChannel().retrieveInfo(pacchetto.getMess()),310));
 			}
 			case 320 -> {
 				String[] content=pacchetto.getMess().split(" ", 2);//[0]=currentName [1]=requestedName

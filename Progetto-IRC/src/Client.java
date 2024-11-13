@@ -98,11 +98,17 @@ public class Client extends Thread{
 						System.out.println("Conferma consegna del whisper: "+entrata);
 					}
 					case 300 -> {
-						System.out.println(entrata.getMess());
 						invia(new Pacchetto("",entrata.getCode()+1));
+						System.out.println(entrata.getMess());
+					}
+					case 310 -> {
+						//entrata pacchetto con informazioni precedentemente richieste
+						invia(new Pacchetto("",entrata.getCode()+1));
+						System.err.println(entrata.getMess());
 					}
 					case 311 -> {
-						System.err.println("Participants list received:\n"+entrata.getMess().replace(" ", "\n"));
+						//conferma ricezione richiesta /info
+						System.err.println(entrata.getMess());
 					}
 					case 321 -> {
 						nome=entrata.getMess();
@@ -172,15 +178,7 @@ public class Client extends Thread{
 	}
 
 	public void retrieveInfo(String type) {
-		if(type==null) return;
-		switch (type) {
-			case "partList" -> {
-				invia(new Pacchetto("",310));
-                }
-			default -> {
-				System.err.println("Wrong syntax for the command.");
-			}
-		}
+		invia(new Pacchetto(type,310));
 	}
 
 	public void kick(String targetName) {

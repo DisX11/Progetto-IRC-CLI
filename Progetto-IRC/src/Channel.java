@@ -81,12 +81,42 @@ public class Channel {
 		return "Client-"+UUID.randomUUID().toString().replaceAll("_", "").substring(0,5);
 	}
 
-	public String getPartString() {
+	public String retrieveInfo(String type) {
+		switch (type) {
+			case "partList" -> {
+				return getPartList();
+            }
+			case "channelsList" -> {
+				return getChannelsList();
+			}
+			case "admin" -> {
+				return getAdmin();
+			}
+			default -> {
+				return "Wrong syntax for the command. Type not found.";
+			}
+		}
+	}
+
+	private String getPartList() {
 		String s="#"+nomeChannel+"\n";
 		for (ThreadCommunication thread : clientConnectionList) {
-			s+=thread.toString()+" ";
+			s+=thread.toString()+"\n";
 		}
 		return s;
+	}
+
+	private String getChannelsList() {
+		return server.getChannelsList();
+	}
+
+	private String getAdmin() {
+		for(ThreadCommunication thread : clientConnectionList) {
+			if(thread.isAdmin()) {
+				return thread.getClientName();
+			}
+		}
+		return "Admin not found.";
 	}
 
 	public void switchChannel(String channelName, ThreadCommunication caller) {
