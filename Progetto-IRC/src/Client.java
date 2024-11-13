@@ -110,10 +110,10 @@ public class Client extends Thread{
 					}
 					case 330 -> {
 						System.out.println(entrata.getMess());
-						invia(new Pacchetto("alert 'muted' ricevuto",entrata.getCode()+1));
+						invia(new Pacchetto("alert ricevuto",entrata.getCode()+1));
 					}case 340 -> {
 						System.out.println(entrata.getMess());
-						invia(new Pacchetto("errore 'muted' ricevuto",entrata.getCode()+1));
+						invia(new Pacchetto("errore ricevuto",entrata.getCode()+1));
 					}
 					case 360 -> {
 						invia(new Pacchetto("",entrata.getCode()+1));

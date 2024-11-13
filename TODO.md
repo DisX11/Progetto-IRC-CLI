@@ -72,22 +72,22 @@ codice 320:
     in poche parole, la risposta contiene il nome da assegnare/sovrascrivere al client
     [conferma delivery: 321]
 
-    integrità nome client inseriti dall'utente:
-        ammette solo a-z A-Z 0-9
-        non inizia con 'Client'
-        no null o vuoto
+integrità nome client inseriti dall'utente:
+    ammette solo a-z A-Z 0-9
+    non inizia con 'Client'
+    no null o vuoto
 
 codice 330:
-    errore x mute
+    alert mute on/off
     [conferma delivery: 331]
 
 codice 340:
-    alert mute on/off
+    errore x mute
     [conferma delivery: 341]
 
 codice 350: (DA FARE)
     alert uscita canale
-    [conferma delivery: 341]
+    [conferma delivery: 351]
 
 codice 360:
     errore impossibilità /kick per mancati privilegi
