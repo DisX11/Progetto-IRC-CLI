@@ -134,13 +134,13 @@ public class ThreadCommunication extends Thread {
 				}
 			}
 		} else {
-			invia(new Pacchetto("Azione temporaneamente non consentita, sei stato mutato.",330));
+			invia(new Pacchetto("Azione temporaneamente non consentita, sei stato mutato.",350));
 		}
 	}
 
 	public void mute(boolean bool, int timeSpan) {
 		if(!currentlyMuted) {
-			invia(new Pacchetto("Sei stato mutato per "+timeSpan+" secondi.",340));
+			invia(new Pacchetto("Sei stato mutato per "+timeSpan+" secondi.",330));
 			currentlyMuted=bool;
 			Timer timer=new Timer();
 			TimerTask task = new TimerTask() {
@@ -148,7 +148,7 @@ public class ThreadCommunication extends Thread {
 				public void run() {
 					if(!clientSocket.isClosed()){
 						currentlyMuted=false;
-						invia(new Pacchetto("Sei stato riattivato.",340));
+						invia(new Pacchetto("Sei stato riattivato.",330));
 					}
 					
 				}
@@ -165,7 +165,7 @@ public class ThreadCommunication extends Thread {
 		if(hasAdminRole) {
 			channel.kick(clientName);
 		} else {
-			invia(new Pacchetto("Privilegi necessari non rilevati. Impossibile eseguire /kick.",360));
+			invia(new Pacchetto("Privilegi necessari non rilevati. Impossibile eseguire /kick.",350));
 		}
 	}
 
@@ -173,7 +173,7 @@ public class ThreadCommunication extends Thread {
 		if(hasAdminRole) {
 			channel.updateAdmin(this, partialInput);
 		} else {
-			invia(new Pacchetto("Privilegi necessari non rilevati. Impossibile eseguire /promote.",380));
+			invia(new Pacchetto("Privilegi necessari non rilevati. Impossibile eseguire /promote.",350));
 		}
 	}
 
@@ -181,7 +181,7 @@ public class ThreadCommunication extends Thread {
 		if(hasAdminRole) {
 			channel.renameChannel(this, requestedChannelName);
 		} else {
-			invia(new Pacchetto("Privilegi necessari non rilevati. Impossibile eseguire /rename.",370));
+			invia(new Pacchetto("Privilegi necessari non rilevati. Impossibile eseguire /rename.",350));
 		}
 	}
 
@@ -196,7 +196,7 @@ public class ThreadCommunication extends Thread {
 			e.printStackTrace();
 			System.out.println("Problemi nella chiusura del socket");
 		}
-		channel.inoltro(new Pacchetto(clientName+" has left the channel.", 350), this.threadId());
+		channel.inoltro(new Pacchetto(clientName+" has left the channel.", 300), this.threadId());
 		System.out.println("Chiudo il socket.");
 	}
 

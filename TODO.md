@@ -1,7 +1,8 @@
 # TODO:
 ### priorità alta:
 - [ ] pulizia codice(print di pacchetti e messaggi, uniformare nomi variabili, unificazione codici, ecc.)
-- [ ] unificazione codici in categorie: alert, not permitter per non-admin, errors(sintassi, target not found, ecc.)
+- [x] unificazione codici in categorie: alert, not permitter per non-admin, errors(sintassi, target not found, ecc.)
+- [x] rimozione duplicati del codice di client e ThreadElaborazione(invio conferma ricezione per i messaggi)
 - [x] nomi channel con prefisso '#'
 - [x] /info admin : restituisce il nick dell'admin presente sul canale (?)
 - [x] /info channelsList : restituisce la lista dei canali attivi sul server, per permettere di scegliere/esserne al corrente
@@ -28,12 +29,10 @@
 
 ### priorità bassa:
 - [ ] [text](https://github.com/inspircd/inspircd/releases/tag/v4.4.0)
-- [ ] Controllo Duplicati (?)
 - [ ] Replica protocollo reale
 - [ ] studio protocollo reale (x idee implementazioni)
 - [ ] documentazione completa codice
 - [ ] documentazione completa protocollo
-- [ ] unit testing
 - [x] cambio numero porta
 - [x] sleep 100 -> 10 ms
 - [x] Nomi client univoci
@@ -56,8 +55,7 @@ cambio numero porta:
     la porta 4321 non è nel range di porte libere [49152 - 65535] quindi va cambiata in un'altra es. 42069
 
 codice 300:
-    alert avviso entrata di client nei canali
-    [conferma delivery: 301]
+    alerts from server to all users
 
 codice 310:
     /info [partList, all, ...]
@@ -79,40 +77,17 @@ integrità nome client inseriti dall'utente:
     no null o vuoto
 
 codice 330:
-    alert mute on/off
-    [conferma delivery: 331]
+    alerts from server to single user
 
 codice 340:
-    errore x mute
-    [conferma delivery: 341]
+    errors from server
 
-codice 350: (DA FARE)
-    alert uscita canale
-    [conferma delivery: 351]
+codice 350: 
+    errors of no privileges
 
-codice 360:
-    errore impossibilità /kick per mancati privilegi
-    [conferma delivery: 361]
-
-codice 370:
-    errore impossibilità /rename
-
-codice 380:
-    errore impossibilità /promote
 
 ---
 CLASSI DI CODICI
-
-100: connessione
-200: messaggistica (client source)
-300: retrieve info (server source)
-400: disconnessione/errori vari
-500: admin
-
-
-
------
-Test doc codici:
 
 100-199 per entrare e connettersi o cambiare
 200-299 per messaggi vari nel canale(User-to-User)

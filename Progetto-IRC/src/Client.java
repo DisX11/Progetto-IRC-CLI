@@ -75,69 +75,53 @@ public class Client extends Thread{
 		while (!closed) {
             try {
 				Pacchetto entrata = (Pacchetto) in.readObject();
+				
 				if(entrata.getCode()%10==1) confermaRicezione=true; //tutti i messaggi **1 sono conferme di avvenuta ricezione
+				
+				if(entrata.getCode()%10==0){//invia la conferma di ricezione a tutti i messaggi che non sono **0
+					invia(new Pacchetto("Pacchetto ricevuto",entrata.getCode()+1));
+				}
 				switch (entrata.getCode()) {
 					case 111 -> {
 						System.out.println(entrata.getMess());
 					}
-					case 200 -> {
+					case 200 -> {//entrata messaggio di un altro utente per solo questo utente
 						String[] messaggio=entrata.getMess().split(" ", 2);
 						entrata.setMess(messaggio[1]);
 						System.out.println(messaggio[0]+": "+entrata);
-						invia(new Pacchetto("messaggio ricevuto",entrata.getCode()+1));
                     }
 					case 201 -> {
 						System.out.println("risposta server: "+entrata);//debug
 					}
-					case 210 -> {
+					case 210 -> {//entrata messaggio di un altro utente per solo questo utente
 						String[] split=entrata.getMess().split(" ",2);
 						System.out.println(split[0]+" has whispered to you: "+split[1]);
-						invia(new Pacchetto("whisper ricevuto",entrata.getCode()+1));
                     }
 					case 211 -> {
 						System.out.println("Conferma consegna del whisper: "+entrata);
 					}
-					case 300 -> {
-						invia(new Pacchetto("",entrata.getCode()+1));
+					case 300 -> {//alert del server per tutti gli utenti
 						System.out.println(entrata.getMess());
 					}
-					case 310 -> {
-						//entrata pacchetto con informazioni precedentemente richieste
-						invia(new Pacchetto("",entrata.getCode()+1));
+					case 310 -> {//entrata pacchetto con informazioni precedentemente richieste
 						System.err.println(entrata.getMess());
 					}
-					case 311 -> {
-						//conferma ricezione richiesta /info
+					case 311 -> {//conferma ricezione richiesta /info
 						System.err.println(entrata.getMess());
 					}
 					case 321 -> {
 						nome=entrata.getMess();
 						System.out.println("Risposta dal server sulla richiesta di cambio nickname. Nome attuale: "+nome);
 					}
-					case 330 -> {
+					case 330 -> {//alert dal server per questo utente
 						System.out.println(entrata.getMess());
-						invia(new Pacchetto("alert ricevuto",entrata.getCode()+1));
-					}case 340 -> {
-						System.out.println(entrata.getMess());
-						invia(new Pacchetto("errore ricevuto",entrata.getCode()+1));
-					}
-					case 350 -> {
-						invia(new Pacchetto("",entrata.getCode()+1));
+					}case 340 -> {//errore dal server nell'eseguire l'azione
 						System.out.println(entrata.getMess());
 					}
-					case 360 -> {
-						invia(new Pacchetto("",entrata.getCode()+1));
+					case 350 -> {//errore dal server per mancati privilegi dell'utente nell'eseguire l'azione
 						System.out.println(entrata.getMess());
 					}
-					case 370 -> {
-						invia(new Pacchetto("",entrata.getCode()+1));
-						System.out.println(entrata.getMess());
-					}
-					case 380 -> {
-						invia(new Pacchetto("",entrata.getCode()+1));
-						System.out.println(entrata.getMess());
-					}
-					case 411 -> {
+					case 411 -> {//
 						System.out.println("Termina comunicazione con: "+entrata);
 						chiudiSocket();
 						closed=true;
@@ -158,7 +142,7 @@ public class Client extends Thread{
             }
 		}
 	}
-	
+	//invio pacchetto al server
 	private void invia(Pacchetto pacchetto) {
 		try {
 			confermaRicezione=pacchetto.getCode()%10==1;
@@ -173,42 +157,52 @@ public class Client extends Thread{
         }
     }
 
+	//generazione pacchetto di messaggio
 	public void mess(String message) {
 		invia(new Pacchetto(nome+" "+message, 200));
 	}
 
+	//generazione pacchetto di whisper
 	public void whisper(String message) {
 		invia(new Pacchetto(nome+" "+message, 210));
 	}
 	
+	//generazione pacchetto di cambio canale
 	public void switchChannel(String channelName) {
 		invia(new Pacchetto(channelName, 110));
 	}
 
-	public void changeNick(String newNick) {
-		invia(new Pacchetto(nome+" "+newNick, 320));
-	}
-
+	//generazione pacchetto di richiesta informazioni
 	public void retrieveInfo(String type) {
 		invia(new Pacchetto(type,310));
 	}
 
+	//generazione pacchetto di cambio nick
+	public void changeNick(String newNick) {
+		invia(new Pacchetto(nome+" "+newNick, 320));
+	}
+	
+	//generazione pacchetto di kick
 	public void kick(String targetName) {
 		invia(new Pacchetto(targetName, 510));
 	}
 
+	//generazione pacchetto di cambio admin
 	public void promote(String electedClientName) {
 		invia(new Pacchetto(electedClientName, 520));
 	}
 
+	//generazione pacchetto di mute
 	public void mute(String targetName, int timeSpan) {
 		invia(new Pacchetto(targetName+" "+timeSpan, 530));
 	}
 
+	//generazione pacchetto di cambio nome canale
 	public void renameChannel(String requestedChannelName) {
 		invia(new Pacchetto(requestedChannelName, 540));
 	}
 
+	//generazione pacchetto di quit
 	public void quit() {
 		invia(new Pacchetto("",410));
 	}
