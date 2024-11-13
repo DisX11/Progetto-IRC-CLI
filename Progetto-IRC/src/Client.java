@@ -124,6 +124,9 @@ public class Client extends Thread{
 						chiudiSocket();
 						closed=true;
                     }
+					case 521 -> {
+						System.out.println(entrata.getMess());
+					}
 					case 531 -> {
 						System.out.println(entrata.getMess());
 					}
@@ -172,6 +175,14 @@ public class Client extends Thread{
 		invia(new Pacchetto(targetName+" "+timeSpan, 530));
 	}
 
+	public void kick(String targetName) {
+		invia(new Pacchetto(targetName, 510));
+	}
+
+	public void promote(String electedClientName) {
+		invia(new Pacchetto(electedClientName, 520));
+	}
+
 	private void chiudiSocket() {
 		try {
 			client.close();
@@ -181,7 +192,5 @@ public class Client extends Thread{
 			System.out.println("Problemi nella chiusura del socket");
 			System.exit(1);
 		}
-	}
-
-    
+	}    
 }

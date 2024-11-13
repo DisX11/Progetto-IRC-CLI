@@ -124,7 +124,8 @@ public class Channel {
 		}
 	}
 
-	public void updateAdmin(String electedClientName) {
+	public void updateAdmin(ThreadCommunication previousAdmin, String electedClientName) {
+		previousAdmin.revokeAdmin();
 		if(electedClientName==null && !clientConnectionList.isEmpty()) {
 			clientConnectionList.getFirst().giveAdmin();
 		} else {

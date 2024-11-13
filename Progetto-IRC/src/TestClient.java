@@ -15,21 +15,23 @@ public class TestClient {
 				if(client.getSocket().isClosed()){
 					
 				} else if(input.equals("/?")) {
-					System.out.println("/info : Request information of the given type;\n/whisper : Send a direct message;\n/nick : Request to change your nickname;\n/mute : Prevent someone else to send messages;\n/kick : Remove a user from the channel;\n/switch : Move to another channel;\n/quit : Disconnect.\n(all the commands above are valid in the current channel's domain.)");
+					System.out.println("--public domain commands--\n/info : Request information of the given type;\n/whisper : Send a direct message;\n/nick : Request to change your nickname;\n/switch : Move to another channel;\n/quit : Disconnect.\n--'admin' role only commands--\n/mute : Prevent someone else to send messages;\n/kick : Remove a user from the channel;\n/promote : Give up the admin role\n(all the commands above are valid in the current channel's domain.)");
 				} else if (input.equals("/info ?")) {
 					System.out.println("Action: request information of the given type.\nSyntax: /info infoType\nTypes: all, partList, ...");			
 				} else if (input.equals("/whisper ?")) {
 					System.out.println("Action: send a direct message\nSyntax: /whisper recipientName\n(recipientName has to be a valid client name)");	
 				} else if (input.equals("/nick ?")) {
 					System.out.println("Action: request to change your nickname\nSyntax: /nick newNickname\n(newNickname has to be a valid nickname)");
-				} else if(input.equals("/mute ?")) {
-					System.out.println("Action: deny another user to send any kind of messages for a given span of time\nSyntax: /mute targetName timeSpan(seconds)");
 				} else if(input.equals("/switch ?")) {
 					System.out.println("Action: move from the current channel to the requested one\nSyntax: /switch destinationChannelName alreadyExists\n(destinationChannelName has to be a valid channel name)\n(you're going to loose all the activity history of the current channel)");
-				} else if(input.equals("/kick ?")) {
-					System.out.println("Action: kick another user out of the current channel\nSyntax: /kick clientName\n(this action cannot be undone)\n('admin' role only command)");
 				} else if(input.equals("/quit ?")) {
 					System.out.println("Action: disconnect from the channel\nSyntax: /quit\n(this action cannot be undone)");
+				} else if(input.equals("/mute ?")) {
+					System.out.println("Action: deny another user to send any kind of messages for a given span of time\nSyntax: /mute targetName timeSpan(seconds)");
+				} else if(input.equals("/kick ?")) {
+					System.out.println("Action: kick another user out of the current channel\nSyntax: /kick clientName\n(this action cannot be undone)");
+				} else if(input.equals("/promote ?")) {
+					System.out.println("Action: Give up the admin role in favor of another user\nSyntax: /promote clientName\n(this action cannot be undone)");
 				} else if(input.equals("/quit")) {
 					client.invia(new Pacchetto("",410));
 				} else if(input.startsWith("/whisper")) {
@@ -53,7 +55,10 @@ public class TestClient {
 					client.invia(new Pacchetto(segments[1], 110));
 				} else if(input.startsWith("/kick")) {
 					String[] segments = input.split(" ",2);
-					client.invia(new Pacchetto(segments[1], 510));
+					client.kick(segments[1]);
+				} else if(input.startsWith("/promote")) {
+					String[] segments = input.split(" ",2);
+					client.promote(segments[1]);
 				} else {
 					client.invia(new Pacchetto(input,200));
 				}

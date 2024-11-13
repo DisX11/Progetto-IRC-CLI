@@ -67,6 +67,10 @@ public class ThreadElaborazione extends Thread{
 				tC.invia(new Pacchetto("Richiesta /kick ricevuta.",pacchetto.getCode()+1));
 				tC.kick(pacchetto.getMess());
 			}
+			case 520 -> {
+				tC.invia(new Pacchetto("Richiesta /promote ricevuta.",pacchetto.getCode()+1));
+				tC.promote(pacchetto.getMess());
+			}
 			case 530 -> {
 				tC.invia(new Pacchetto("",531));
 				String targetName=pacchetto.getMess().split(" ",2)[0];
@@ -79,8 +83,6 @@ public class ThreadElaborazione extends Thread{
 					tC.invia(new Pacchetto("Privilegi necessari non rilevati. Impossibile eseguire /mute.",340));
 				}
 			}
-		}
-            
-        
+		}        
     }
 }

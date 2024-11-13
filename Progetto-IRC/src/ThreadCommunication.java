@@ -169,9 +169,13 @@ public class ThreadCommunication extends Thread {
 		}
 	}
 
+	public void promote(String partialInput) {
+		channel.updateAdmin(this, partialInput);
+	}
+
 	public void chiudiSocket() {
 		channel.chiudiSocket(this);
-		if(hasAdminRole)channel.updateAdmin(null);
+		if(hasAdminRole)channel.updateAdmin(this, null);
 		if(clientSocket.isClosed())return;
 		try {
 			out.writeObject(new Pacchetto("Connessione terminata.", 411));

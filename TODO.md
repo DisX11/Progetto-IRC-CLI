@@ -1,12 +1,14 @@
 # TODO:
 ### priorità alta:
 - [ ] pulizia codice(print di pacchetti e messaggi, uniformare nomi variabili, ordinamento codici, ecc.)
-- [ ] /assign user (pacchetto unico per aggiunta/cambio admin) (520)
+- [ ] forEach() semplificati in get(indexOf()) passando l'intero thread al metodo
 - [ ] admin può cambiare nome al channel (?)
-- [ ] completare opzioni parametri di /info
 - [ ] thread.toString() completo di ruoli
 - [ ] nomi channel con prefisso '#'
-- [ ] /info admin restituisce il nick dell'admin presente sul canale (?)
+- [ ] completare opzioni parametri di /info
+- [ ] /info admin : restituisce il nick dell'admin presente sul canale (?)
+- [ ] /info channelList : restituisce la lista dei canali attivi sul server, per permettere di scegliere/esserne al corrente
+- [x] /promote clientName (520)
 - [x] /mute (530)
 - [x] fix problema se client quitta prima della fine del mute
 - [x] thread mancante in threadCommunication per ricezione conferma (matei)
