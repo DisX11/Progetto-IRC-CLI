@@ -130,7 +130,7 @@ public class ThreadCommunication extends Thread {
 				}
 				case 210 -> {
 					String[] split=pacchetto.getMess().split(" ",2);
-					channel.whisper(this, split[0], new Pacchetto(clientName+" "+split[1],pacchetto.getCode()));//invio del whisper al destinatario
+					channel.whisper(this, split[0] ,new Pacchetto(clientName+" "+split[1],pacchetto.getCode()));//invio del whisper al destinatario
 				}
 			}
 		} else {

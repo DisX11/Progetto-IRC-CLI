@@ -164,7 +164,7 @@ public class Client extends Thread{
 
 	//generazione pacchetto di whisper
 	public void whisper(String message) {
-		invia(new Pacchetto(nome+" "+message, 210));
+		invia(new Pacchetto(message, 210));
 	}
 	
 	//generazione pacchetto di cambio canale

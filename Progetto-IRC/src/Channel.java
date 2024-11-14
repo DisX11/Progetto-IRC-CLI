@@ -56,7 +56,7 @@ public class Channel {
 				}
 			});
 		} else {//cambio codice in un classe 300
-			sender.invia(new Pacchetto("Nome client destinatario errato oppure non presente nel canale.", pacchetto.getCode()+1));
+			sender.invia(new Pacchetto("Nome client destinatario errato oppure non presente nel canale.", 330));
 		}
 	}
 

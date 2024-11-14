@@ -7,7 +7,7 @@ public class TestClient {
 		Scanner scanner=new Scanner(System.in);
 		String input;
 		do{
-			Client client = new Client("localhost", 42069, "");
+			Client client = new Client("127.0.0.1", 42069, "");
 
 			do {
 				System.out.print("Inserisci un nuovo messaggio da inviare al server ('/quit' per terminare): ");
