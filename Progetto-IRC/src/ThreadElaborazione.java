@@ -28,7 +28,6 @@ public class ThreadElaborazione extends Thread{
 				tC.switchChannel(pacchetto.getMess());
 			}
 			case 200 -> {
-				pacchetto.setMess(tC.getClientName()+" "+pacchetto.getMess());
 				tC.messInUscita(pacchetto);
 			}
 			case 210 -> {
@@ -48,6 +47,7 @@ public class ThreadElaborazione extends Thread{
 				if(tC.getChannel().isNomeClientOK(tC, content[1])) {
 					System.out.println("Richiesta da "+tC.getClientName()+" di cambio nickname approvata: {"+tC.getClientName()+"} diventa {"+content[1]+"}.");
 					tC.setClientName(content[1]);
+					invia(new Pacchetto(content[1],320));
 				} else {
 					System.out.println("Richiesta da "+tC.getClientName()+" di cambio nickname non approvata.");
 				}

@@ -38,8 +38,8 @@ public class TestClient2 {
 				} else if(input.equals("/quit")) {
 					client.quit();
 				} else if(input.startsWith("/whisper")) {
-					String[] segments = input.split(" ",3);
-					client.whisper(segments[1]+" "+segments[2]);
+					String[] segments = input.split(" ",2);
+					client.whisper(segments[1]);
 				} else if(input.startsWith("/nick")) {
 					String[] segments = input.split(" ",2);
 					client.changeNick(segments[1]);

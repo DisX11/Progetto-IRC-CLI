@@ -109,7 +109,7 @@ public class Client extends Thread{
 					case 311 -> {//conferma ricezione richiesta /info
 						System.err.println(entrata.getMess());
 					}
-					case 321 -> {
+					case 320 -> {
 						nome=entrata.getMess();
 						System.out.println("Risposta dal server sulla richiesta di cambio nickname. Nome attuale: "+nome);
 					}
